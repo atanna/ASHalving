@@ -1,20 +1,20 @@
-import java.io.IOException;
+package algo.guided_problems.gghp;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
-import algo.graph.GenomeException;
-import algo.graph.OrdinaryGenome;
-import algo.guided_problems.GGHPGraph;
-import algo.guided_problems.gghp.Solver;
-import algo.solver.Solution;
 import algo.graph.BaseGenome;
 import algo.graph.Neighbours;
+import algo.graph.OrdinaryGenome;
+import algo.guided_problems.GGHPGraph;
+import org.junit.Test;
 
+import static org.junit.Assert.*;
 
-public class Main {
+public class SolverTest {
 
-    public static void testGGHPSolver() throws Exception {
+    @Test
+    public void solve() throws Exception {
         ArrayList<ArrayList<Integer>> neighbours = new ArrayList<>();
         neighbours.add(new ArrayList<>(Arrays.asList(5, 3)));
         neighbours.add(new ArrayList<>(Arrays.asList(1, 1)));
@@ -38,14 +38,11 @@ public class Main {
         OrdinaryGenome guidedGenome = new OrdinaryGenome(Arrays.asList(4, 2, 1, 5, 0, 3, 7, 6, 9, 8, 11, 10, 13, 12));
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
-        algo.guided_problems.gghp.Solver solver = new Solver(graph);
+        Solver solver = new Solver(graph);
         solver.solve();
 
-        System.out.println(solver.getCurrentSolution());
-    }
+        int cyclesCount = solver.getCurrentSolution().getCyclesCount();
 
-    public static void main(String[] args) throws Exception {
-        testGGHPSolver();
+        assertEquals(16, cyclesCount);
     }
-
 }
