@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import algo.graph.GenomeException;
 import algo.graph.Graph;
 
 
@@ -85,6 +86,10 @@ public abstract class BaseAdequateSubgraph {
             return resultedEdges;
         }
 
+        public void setResultedEdges(List<Graph.Edge> resultedEdges) {
+            this.resultedEdges = resultedEdges;
+        }
+
         public int getCyclesCount() {
             return cyclesCount;
         }
@@ -99,7 +104,7 @@ public abstract class BaseAdequateSubgraph {
     }
 
 
-    public abstract Branch searchExplicitBranch() throws DetectorException;
+    public abstract Branch searchExplicitBranch() throws DetectorException, GenomeException;
 
     public abstract ArrayList<Branch> search() throws Exception;
 

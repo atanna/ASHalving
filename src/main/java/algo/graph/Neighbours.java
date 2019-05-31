@@ -57,9 +57,9 @@ public class Neighbours implements Serializable {
                     throw new GenomeException("Edge must be undirected");
                 }
             }
-            if (vertexDegree != degree) {
-                throw new GenomeException("Graph is not regular. All degrees must be equal");
-            }
+//            if (vertexDegree != degree) {
+//                throw new GenomeException("Graph is not regular. All degrees must be equal");
+//            }
         }
         if (verticesCount + removedVertices.size() != neighbours.size()) {
             throw new GenomeException("Something wrong with vertices iterator: " + verticesCount + " " + removedVertices.size() + " " + neighbours.size());
@@ -225,10 +225,10 @@ public class Neighbours implements Serializable {
         return result;
     }
 
-    public int size() throws GenomeException {
-        if (neighbours.size() < removedVertices.size()) {
-            throw new GenomeException("It's not possible case");
-        }
+    public int size() {
+//        if (neighbours.size() < removedVertices.size()) {
+//            throw new GenomeException("It's not possible case");
+//        }
         return neighbours.size() - removedVertices.size();
     }
 }

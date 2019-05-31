@@ -62,4 +62,11 @@ public class Graph {
     public HashMap<String, BaseGenome> getGenomes() {
         return genomes;
     }
+
+    @Override
+    public String toString() {
+        String result = String.join("\n",
+                genomes.entrySet().stream().map(entry -> String.valueOf(entry.getKey() + ":\n" + String.valueOf(entry.getValue()))).toArray(String[]::new));
+        return result;
+    }
 }

@@ -2,6 +2,7 @@ package algo.solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import algo.graph.Graph;
 
@@ -12,6 +13,7 @@ public class Solution {
     private Counts counts;
 
     public static class Counts {
+        public HashMap<String, Integer> counts;
         public int iterations = 0;
         public int bruteForceBranches = 0;
         public int terminatedBranches = 0;
@@ -19,16 +21,14 @@ public class Solution {
         public int as2 = 0;
 
         public Counts() {
+            counts = new HashMap<>();
         }
 
         @Override
         public String toString() {
             String result = String.join("\n", Arrays.asList(
-                "iterations: " + iterations,
-                "bruteForceBranches: " + bruteForceBranches,
-                "terminatedBranches: " + terminatedBranches,
-                "as1: " + as1,
-                "as2: " + as2
+                    "iterations: ", String.valueOf(iterations),
+                    "counts: ", String.valueOf(counts)
             ));
             return result;
         }
@@ -88,6 +88,7 @@ public class Solution {
     public String toString() {
         String result = String.join("\n", Arrays.asList(
                 "cyclesCount: " + cyclesCount,
+                "distance: " + (int)(3*resultMatching.size() - cyclesCount),
                 "resultMatching: " + resultMatching
         ));
         return result;

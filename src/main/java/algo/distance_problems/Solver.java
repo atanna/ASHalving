@@ -56,7 +56,7 @@ public class Solver extends BaseSolver<BaseGenome> {
         return newStates;
     }
 
-    private boolean isMissState(State<BaseGenome> state) {
+    protected boolean isMissState(State<BaseGenome> state) {
         return getCurrentCyclesCount()
                 > state.cyclesCount + state.data.getNeighbours().neighbours.size() * state.data.getDegree() / 2;
     }

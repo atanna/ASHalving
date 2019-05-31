@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import algo.graph.BaseGenome;
+import algo.graph.DuplicatedGenome;
 import algo.graph.Neighbours;
 import algo.graph.OrdinaryGenome;
 import algo.guided_problems.GGHPGraph;
@@ -32,7 +33,7 @@ public class SolverTest {
         neighbours.add(new ArrayList<>(Arrays.asList(10, 12)));
         neighbours.add(new ArrayList<>(Arrays.asList(11, 13)));
         neighbours.add(new ArrayList<>(Arrays.asList(12, 8)));
-        BaseGenome baseGenome = new BaseGenome(new Neighbours(neighbours, 2));
+        DuplicatedGenome baseGenome = new DuplicatedGenome(neighbours);
 
 
         OrdinaryGenome guidedGenome = new OrdinaryGenome(Arrays.asList(4, 2, 1, 5, 0, 3, 7, 6, 9, 8, 11, 10, 13, 12));

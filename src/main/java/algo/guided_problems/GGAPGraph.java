@@ -83,7 +83,7 @@ public class GGAPGraph extends Graph {
         return graph;
     }
 
-    public int size() throws GenomeException {
+    public int size() {
         return baseGenome.getNeighbours().size();
     }
 

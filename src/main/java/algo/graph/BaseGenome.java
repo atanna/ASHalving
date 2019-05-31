@@ -1,9 +1,15 @@
 package algo.graph;
 
 
+import java.util.ArrayList;
+
 public class BaseGenome {
 
     protected Neighbours neighbours;
+
+    public BaseGenome(ArrayList<ArrayList<Integer>> nbrs, int degree) {
+        this.neighbours = new Neighbours(nbrs, degree);
+    }
 
     public BaseGenome(Neighbours neighbours) {
         this.neighbours = neighbours;
