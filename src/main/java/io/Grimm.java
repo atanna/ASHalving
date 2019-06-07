@@ -1,9 +1,14 @@
 package io;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import genome.Chromosome;
 import genome.DirectedGene;
 import genome.Genome;
@@ -71,6 +76,62 @@ public class Grimm {
             try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
                 return Reader.parse(in);
             }
+        }
+
+    }
+
+    public static class Writer {
+
+        public static void write(BufferedWriter writer, List<Genome> genomes) {
+            write(writer, genomes, "");
+        }
+
+        public static void write(BufferedWriter writer, List<Genome> genomes, String comment) {
+            try {
+                if (comment.length() > 0) {
+                    writer.append("# ").append(comment).append("\n\n");
+                }
+                for (Genome genome : genomes) {
+                    writer.append(">").append(genome.getName()).append("\n");
+                    for (Chromosome chromosome : genome.getChromosomes()) {
+                        for (DirectedGene gene : chromosome.getGenes()) {
+                            writer.append(gene.toString()).append(" ");
+                        }
+                        if (chromosome.isCyclical()) {
+                            writer.append("@\n");
+                        } else {
+                            writer.append("$\n");
+                        }
+                    }
+                }
+                writer.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        public static void writeToFile(String fileName, Genome genome) {
+            writeToFile(fileName, genome, "");
+        }
+
+        public static void writeToFile(String fileName, List<Genome> genomes) {
+            writeToFile(fileName, genomes, "");
+        }
+
+        public static void writeToFile(String fileName, Genome genome, String comment) {
+            writeToFile(fileName, Arrays.asList(genome), comment);
+
+        }
+
+        public static void writeToFile(String fileName, List<Genome> genomes, String comment) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+                write(writer, genomes, comment);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }

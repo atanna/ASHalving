@@ -2,6 +2,8 @@ package algo.guided_problems.gghp.detector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -369,8 +371,17 @@ public class Detector extends BaseAdequateSubgraph {
 
 
         Integer[] targets = neighbours.getSortedVertexNeighbours(vertex).toArray(Integer[]::new);
-
-
+//        List<Integer> matchingCandidates = Arrays.asList(neighbours.getVertices().toArray(Integer[]::new));
+//        Collections.shuffle(matchingCandidates);
+//        for (int j = 0; j < targets.length; ++j) {
+//            for (int i = 0; i < matchingCandidates.size(); ++i) {
+//                if (matchingCandidates.get(i).equals(targets[j])) {
+//                    matchingCandidates.set(i, matchingCandidates.get(j));
+//                    matchingCandidates.set(j, targets[j]);
+//                }
+//            }
+//        }
+//        for (int matchingVertex : matchingCandidates) {
         for (Iterator<Integer> it = neighbours.getVertices().iterator(); it.hasNext(); ) {
             int matchingVertex = it.next();
 

@@ -106,7 +106,7 @@ public class Neighbours implements Serializable {
     }
 
     public boolean hasEdge(int source, int target) {
-        if (source >= neighbours.size()) {
+        if (source >= neighbours.size() || removedVertices.contains(target)) {
             return false;
         }
         return neighbours.get(source).contains(target);

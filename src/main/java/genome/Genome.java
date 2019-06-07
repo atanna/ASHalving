@@ -31,4 +31,9 @@ public class Genome {
     public ArrayList<Chromosome> getChromosomes() {
         return chromosomes;
     }
+
+    @Override
+    public String toString() {
+        return name + ":\n" + chromosomes;
+    }
 }

@@ -1,11 +1,14 @@
 package algo.solver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.stream.Stream;
 
 import algo.graph.GenomeException;
+import algo.graph.Graph;
 
 
 public abstract class BaseSolver<T> {
@@ -23,6 +26,9 @@ public abstract class BaseSolver<T> {
     protected long startTime = 0;
     protected long finishTime = 0;
     protected long timeLimit = 2 * 60 * 60 * 1000; // 2 hours
+    protected AtomicIntegerArray branchesCounter;
+
+    protected abstract int getSize();
 
     public BaseSolver (T data) {
         this.data = data;
@@ -64,7 +70,8 @@ public abstract class BaseSolver<T> {
         boolean result = solve(INF);
 
         finishTime = System.currentTimeMillis();
-        System.out.println();
+        System.out.println((finishTime +0. - startTime) / 1000/ 60  + " " + "min");
+        System.out.println((finishTime + 0. - startTime) / 1000/ 60 / 60 + " "  + "hours");
         return result;
     }
 
@@ -159,6 +166,9 @@ public abstract class BaseSolver<T> {
                     pq.add(nextState);
                 }
             }
+        }
+        if (!hasNextState()) {
+            currentSolution.setExact(true);
         }
 
         return !hasNextState();

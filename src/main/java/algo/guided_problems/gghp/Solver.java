@@ -42,6 +42,11 @@ public class Solver extends ParallelSolver<GGHPGraph> {
     }
 
     @Override
+    protected int getSize() {
+        return data.size();
+    }
+
+    @Override
     public List<State<GGHPGraph>> computeNextStates(State<GGHPGraph> state) throws Exception {
         ArrayList<State<GGHPGraph>> states = new ArrayList<>();
         ArrayList<BaseAdequateSubgraph.Branch> branches = new ArrayList<>();
@@ -92,6 +97,15 @@ public class Solver extends ParallelSolver<GGHPGraph> {
                 setBounds(newState);
                 states.add(newState);
             }
+        }
+
+//        System.out.println();
+//        for (State st : states) {
+//            System.out.println(state.resultMatching.size() + " " + st.resultMatching.size());
+//        }
+
+        if (states.size() > 1) {
+            branchesCounter.getAndIncrement(state.resultMatching.size());
         }
         return states;
     }

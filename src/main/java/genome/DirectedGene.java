@@ -1,47 +1,59 @@
 package genome;
 
+import java.util.HashMap;
+
 public class DirectedGene {
+    private static final String HEAD = "h";
+    private static final String TAIL = "t";
 
-    public class Gene {
-        public abstract class HalfGene {
-            private final String halfName;
-            public HalfGene(String halfName) {
-                this.halfName = halfName;
-            }
+    public static class HalfGene {
+        private final String geneName;
+        private final String halfName;
 
-            public abstract HalfGene getOppositeHalf();
-
-            public String getName() {
-                return name + "_" + halfName;
-            }
-
-            public String toString() {
-                return this.getName();
-            }
+        public HalfGene(String geneName, String halfName) {
+            this.geneName = geneName;
+            this.halfName = halfName;
         }
 
-        private class Head extends HalfGene {
-            public Head() {
-                super("h");
-            }
-
-
-            @Override
-            public HalfGene getOppositeHalf() {
-                return tail;
-            }
+        public boolean isHead() {
+            return halfName.equals(HEAD);
         }
 
-        private class Tail extends HalfGene {
-            public Tail() {
-                super("t");
-            }
-
-            @Override
-            public HalfGene getOppositeHalf() {
-                return head;
-            }
+        public String getName() {
+            return geneName + "_" + halfName;
         }
+
+        public String getGeneName() {
+            return geneName;
+        }
+
+        public String toString() {
+            return this.getName();
+        }
+
+        public  static HalfGene asHead(String geneName) {
+            return new HalfGene(geneName, HEAD);
+        }
+
+        public static HalfGene asTail(String geneName) {
+            return new HalfGene(geneName, TAIL);
+        }
+
+        public static HalfGene convertToHalf(String halfName) {
+            return new HalfGene(halfName.substring(0, halfName.length() - 2), halfName.substring(halfName.length()-1));
+        }
+
+        public HalfGene getOppositeHalf() {
+            return Gene.getOppositeHalf(this);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return getName().equals(((HalfGene)(obj)).getName());
+        }
+    }
+
+    public static class Gene {
 
         private final String name;
         private final HalfGene head;
@@ -49,8 +61,8 @@ public class DirectedGene {
 
         public Gene(String name) {
             this.name = name;
-            this.head = new Head();
-            this.tail = new Tail();
+            this.head = HalfGene.asHead(name);
+            this.tail = HalfGene.asTail(name);
         }
 
         public String getName() {
@@ -63,6 +75,15 @@ public class DirectedGene {
 
         public HalfGene getTail() {
             return tail;
+        }
+
+
+        public static HalfGene getOppositeHalf(HalfGene halfGene) {
+            if (halfGene.isHead()) {
+                return new HalfGene(halfGene.getGeneName(), TAIL);
+            } else {
+                return new HalfGene(halfGene.getGeneName(), HEAD);
+            }
         }
     }
 
@@ -86,15 +107,23 @@ public class DirectedGene {
         return gene.getName();
     }
 
-    public Gene.HalfGene getHead() {
+    public HalfGene getHead() {
         if (sign > 0) {
             return gene.getHead();
         }
         return gene.getTail();
     }
 
-    public Gene.HalfGene getTail() {
-        return getHead().getOppositeHalf();
+    public HalfGene getTail() {
+        return  Gene.getOppositeHalf(getHead());
     }
 
+    @Override
+    public String toString() {
+        String strSign = "";
+        if (sign <= 0) {
+            strSign = "-";
+        }
+        return strSign+getName();
+    }
 }

@@ -16,6 +16,11 @@ import algo.solver.State;
 
 public class Solver extends BaseSolver<BaseGenome> {
 
+    @Override
+    protected int getSize() {
+        return data.getNeighbours().size();
+    }
+
     public Solver(BaseGenome genome) {
         super(genome);
     }

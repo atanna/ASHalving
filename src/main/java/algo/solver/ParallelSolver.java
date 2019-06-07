@@ -1,12 +1,20 @@
 package algo.solver;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 public abstract class ParallelSolver<T> extends BaseSolver<T> {
 
@@ -21,7 +29,24 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
 
     public boolean solve(int maxIterariton) throws Exception {
         BaseNode root = new Node(getFirstState());
-        currentSolution = new ForkJoinPool().invoke(new MainSolver(root));
+        branchesCounter = new AtomicIntegerArray(getSize());
+        currentSolution = new ForkJoinPool().invoke(new MainSolver(root, ""));
+
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("test.txt"));
+
+
+        for (int i = 0; i < branchesCounter.length(); ++i) {
+            int count = branchesCounter.get(i);
+            writer.append(i + " " + count + "\n");
+        }
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
         return true;
     }
 
@@ -54,6 +79,7 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
             return false;
         }
         if (state.getUpperBound().isPresent() && state.getUpperBound().get() < atomicLowerBound.get()) {
+//            System.out.println(state.resultMatching.size() + ":  " + state.getUpperBound().get() + " " + atomicLowerBound.get());
             return true;
         }
         return false;
@@ -108,14 +134,21 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
 
     public class MainSolver extends RecursiveTask<Solution> {
         private final BaseNode node;
+        String name;
+        private long computationTime = 0;
 
-        public MainSolver(BaseNode state) {
+        public MainSolver(BaseNode state, String name) {
             this.node = state;
+            this.name = name;
         }
 
         @Override
         protected Solution compute() {
-//            System.out.println("compute " + node.getName());
+//            System.out.println("compute " + name + "  Thread " + Thread.currentThread().getName() );
+
+            long startTime = System.currentTimeMillis();
+            boolean exact = true;
+
 
 
             Solution bestSolution = node.getSolution();
@@ -130,17 +163,29 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
                 return bestSolution;
             }
 
+            int i = 0;
+//            ArrayList<String> childs = new ArrayList<>();
             for(BaseNode child : node.getNextStates()) {
-                MainSolver task = new MainSolver(child);
+                ++i;
+                String childName = name + "_" + i;
+                MainSolver task = new MainSolver(child, childName);
                 task.fork(); // запустим асинхронно
                 subTasks.add(task);
+//                childs.add(childName);
             }
+//            nodes.put(name, childs);
             node.updateIfBetter(bestSolution);
 
             for(MainSolver task : subTasks) {
                 Solution solution = task.join(); // дождёмся выполнения задачи и прибавим результат
+                if (!solution.isExact()) {
+                    exact = false;
+                }
                 bestSolution.updateIfBeter(solution);
             }
+            computationTime = System.currentTimeMillis() - startTime;
+//            System.out.println("  finish " + name + "  " + computationTime / 1000 );
+            bestSolution.setExact(true);
             return bestSolution;
         }
 

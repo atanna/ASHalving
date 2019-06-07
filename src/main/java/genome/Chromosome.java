@@ -24,4 +24,9 @@ public class Chromosome {
     public boolean isCyclical() {
         return cyclical;
     }
+
+    @Override
+    public String toString() {
+        return genes + " " + cyclical + "\n";
+    }
 }

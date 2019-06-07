@@ -11,6 +11,15 @@ public class Solution {
     protected int cyclesCount;
     protected ArrayList<Graph.Edge> resultMatching;
     private Counts counts;
+    private boolean isExact = false;
+
+    public void setExact(boolean exact) {
+        isExact = exact;
+    }
+
+    public boolean isExact() {
+        return isExact;
+    }
 
     public static class Counts {
         public HashMap<String, Integer> counts;
@@ -88,10 +97,15 @@ public class Solution {
     public String toString() {
         String result = String.join("\n", Arrays.asList(
                 "cyclesCount: " + cyclesCount,
-                "distance: " + (int)(3*resultMatching.size() - cyclesCount),
+                "distance: " + getDistance(),
                 "resultMatching: " + resultMatching
         ));
         return result;
     }
+
+    public int getDistance() {
+        return 3*resultMatching.size() - cyclesCount;
+    }
+
 }
 

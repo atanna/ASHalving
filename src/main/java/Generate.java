@@ -2,7 +2,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import algo.graph.DuplicatedGenome;
-import algo.graph.GenomeException;
 import algo.graph.OrdinaryGenome;
 import algo.guided_problems.GGHPGraph;
 import algo.guided_problems.gghp.Solver;
@@ -47,8 +46,8 @@ public class Generate {
         return nbrs;
     }
 
-    public static ArrayList<ArrayList<Integer>> generate(int n) {
-        Random randomSeed = new Random(35);
+    public static ArrayList<ArrayList<Integer>> generate(int n, int seed) {
+        Random randomSeed = new Random(seed);
         return addMatching(n, randomSeed.nextInt());
 
     }
@@ -162,10 +161,19 @@ public class Generate {
     }
 
     public static void main(String[] args) throws Exception {
-        Random random = new Random();
-        ArrayList<ArrayList<Integer>> genome = generate(700);
+        int seed = 5;
+
+        seed = (new Random()).nextInt();
+        seed = -1253887205;
+//        Random random = new Random(seed);
+
+        System.out.println(seed);
+        Random random = new Random(seed);
+
+        ArrayList<ArrayList<Integer>> genome = generate(28, random.nextInt());
 
         ArrayList<ArrayList<Integer>> doubleGenome = getDoubleGenome(genome);
+
 
         int seed1 = random.nextInt();
         int seed2 = random.nextInt();
@@ -181,7 +189,6 @@ public class Generate {
         solver.solve();
 
         System.out.println(solver.getCurrentSolution());
-        ;
 
         String result  = solver.getCurrentSolution().toString();
     }

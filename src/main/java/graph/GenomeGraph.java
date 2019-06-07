@@ -2,8 +2,10 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.SplittableRandom;
 
+import algo.graph.Neighbours;
 import genome.Chromosome;
 import genome.DirectedGene;
 import genome.Genome;
@@ -16,7 +18,7 @@ public class GenomeGraph {
             this.name = name;
         }
 
-        public Vertex(DirectedGene.Gene.HalfGene vertex) {
+        public Vertex(DirectedGene.HalfGene vertex) {
             this(vertex.getName());
         }
 
@@ -29,20 +31,41 @@ public class GenomeGraph {
         }
     }
 
+    public static class Indexes {
+        HashMap<Integer, String> idToVertex;
+        HashMap<String, Integer> vertexToId;
+
+        public Indexes(HashMap<Integer, String> idToVertex, HashMap<String, Integer> vertexToId) {
+            this.idToVertex = idToVertex;
+            this.vertexToId = vertexToId;
+        }
+    }
+
     private HashMap<String, Vertex> vertices;
     private HashMap<Vertex, ArrayList<Vertex>> edges;
+
+
+    public Vertex getVertex(String name) {
+        if (!vertices.containsKey(name)) {
+            vertices.put(name, new Vertex(name));
+        }
+        return vertices.get(name);
+    }
+
+    public Vertex getVertex(DirectedGene.HalfGene gene) {
+        return getVertex(gene.getName());
+    }
 
     public GenomeGraph(Genome genome) {
         edges = new HashMap<>();
         vertices = new HashMap<>();
+
         for (Chromosome chromosome : genome.getChromosomes()) {
             Vertex previousVertex = null;
             Vertex firstVertex = null;
             for (DirectedGene gene : chromosome.getGenes()) {
-                Vertex vertexFrom = new Vertex(gene.getHead());
-                Vertex vertexTo = new Vertex(gene.getTail());
-                addVertex(vertexFrom);
-                addVertex(vertexTo);
+                Vertex vertexFrom = getVertex(gene.getHead());
+                Vertex vertexTo = getVertex(gene.getTail());
                 if (previousVertex != null) {
                     addEdge(previousVertex, vertexFrom);
                 } else {
@@ -56,10 +79,39 @@ public class GenomeGraph {
          }
     }
 
-    private void addVertex(Vertex vertex) {
-        if (!vertices.containsKey(vertex.getName())) {
-            vertices.put(vertex.getName(), vertex);
+    public Indexes createIndexes() {
+        HashMap<Integer, String> idToVertex = new HashMap<>();
+        HashMap<String, Integer> vertexToId = new HashMap<>();
+        int maxCurrentID = 0;
+        for (Vertex vertex : vertices.values()) {
+            int id = vertexToId.getOrDefault(vertex.name, maxCurrentID);
+            if (id == maxCurrentID) {
+                maxCurrentID++;
+            }
+            vertexToId.put(vertex.name, id);
+            idToVertex.put(id, vertex.name);
         }
+        return new Indexes(idToVertex, vertexToId);
+    }
+
+    public Neighbours getNeighbours(Indexes indexes) {
+        ArrayList<ArrayList<Integer>> nbrs = new ArrayList<>(vertices.size());
+        int degree = 0;
+        for (int i = 0; i < vertices.size(); ++i) {
+            ArrayList<Integer> arr = new ArrayList<>();
+            String vertex = indexes.idToVertex.get(i);
+            degree = 0;
+            for (Vertex target : getAdjacentVertices(vertex)) {
+                arr.add(indexes.vertexToId.get(target.name));
+                degree++;
+            }
+            nbrs.add(arr);
+        }
+        return new Neighbours(nbrs, degree);
+    }
+
+    private void addEdge(String first, String second) {
+        addEdge(getVertex(first), getVertex(second));
     }
 
     private void addEdge(Vertex first, Vertex second) {
@@ -84,10 +136,6 @@ public class GenomeGraph {
 
     public HashMap<String, Vertex> getVertices() {
         return vertices;
-    }
-
-    public Vertex getVertex(String name) {
-        return vertices.get(name);
     }
 
     public ArrayList<Vertex> getAdjacentVertices(String name) {
