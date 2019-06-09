@@ -105,6 +105,7 @@ public class Grimm {
                     }
                 }
                 writer.flush();
+                writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

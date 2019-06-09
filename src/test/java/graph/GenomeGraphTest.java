@@ -20,11 +20,11 @@ public class GenomeGraphTest {
                 new DirectedGene("3"))
         ), true));
         GenomeGraph graph = new GenomeGraph(genome);
-        assertEquals(6, graph.getSize());
+        assertEquals(4, graph.getSize());
 
         ArrayList<GenomeGraph.Vertex> vertices =  graph.getAdjacentVertices("1_h");
 
         assertEquals(1, vertices.size());
-        assertEquals(vertices.get(0).getName(), "3_t");
+        assertEquals("3_t", vertices.get(0).getName());
     }
 }

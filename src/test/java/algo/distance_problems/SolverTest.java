@@ -33,7 +33,7 @@ public class SolverTest {
         solver.solve(100);
         Solution result = solver.getCurrentSolution();
 
-        assertEquals(6, result.getCyclesCount());
+        assertEquals(result.getCyclesCount(), 6);
     }
 
     @Test

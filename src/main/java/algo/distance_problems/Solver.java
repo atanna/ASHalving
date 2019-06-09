@@ -21,6 +21,11 @@ public class Solver extends BaseSolver<BaseGenome> {
         return data.getNeighbours().size();
     }
 
+    @Override
+    protected int getFullDegree() {
+        return data.getNeighbours().getDegree();
+    }
+
     public Solver(BaseGenome genome) {
         super(genome);
     }
@@ -62,8 +67,11 @@ public class Solver extends BaseSolver<BaseGenome> {
     }
 
     protected boolean isMissState(State<BaseGenome> state) {
-        return getCurrentCyclesCount()
-                > state.cyclesCount + state.data.getNeighbours().neighbours.size() * state.data.getDegree() / 2;
+        if (getCurrentCyclesCount()
+                > state.cyclesCount + state.data.getNeighbours().neighbours.size() * state.data.getDegree() / 2) {
+            return true;
+        }
+        return super.isMissState(state);
     }
 
 

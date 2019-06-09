@@ -97,14 +97,18 @@ public class Solution {
     public String toString() {
         String result = String.join("\n", Arrays.asList(
                 "cyclesCount: " + cyclesCount,
-                "distance: " + getDistance(),
-                "resultMatching: " + resultMatching
+                "isExact: " + isExact
         ));
         return result;
     }
 
-    public int getDistance() {
-        return 3*resultMatching.size() - cyclesCount;
+    public String toStringWithMatchig() {
+        return toString() + "\nresultedMatching: " + resultMatching;
+
+    }
+
+    public boolean isFull(int size) {
+        return 2*resultMatching.size() == size;
     }
 
 }

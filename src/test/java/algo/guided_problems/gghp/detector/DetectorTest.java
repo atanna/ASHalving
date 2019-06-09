@@ -35,17 +35,17 @@ public class DetectorTest {
         OrdinaryGenome guidedGenome = new OrdinaryGenome(Arrays.asList(4, 2, 1, 5, 0, 3, 7, 6));
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
-        Detector detector = new Detector(graph);
+        Detector detector = new Detector(graph, false);
         ArrayList<BaseAdequateSubgraph.Branch> branches = detector.search();
         assertEquals(1, branches.size());
         BaseAdequateSubgraph.Branch branch = branches.get(0);
-        assertEquals(2, branch.getResultedEdges().size());
+        assertEquals(4, branch.getResultedEdges().size());
         // 4
         assertEquals(new Graph.Edge(1, 2), branch.getResultedEdges().get(0));
 
         // 3
         assertEquals(new Graph.Edge(6, 7), branch.getResultedEdges().get(1));
-        assertEquals(5, branch.getCyclesCount());
+        assertEquals(9, branch.getCyclesCount());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class DetectorTest {
         OrdinaryGenome guidedGenome = new OrdinaryGenome(Arrays.asList(5, 4, 3, 2, 1, 0, 11, 9, 10, 7, 8, 6));
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
-        Detector detector = new Detector(graph);
+        Detector detector = new Detector(graph, false);
         ArrayList<BaseAdequateSubgraph.Branch> branches = detector.search();
         assertEquals(1, branches.size());
         assertEquals(new HashSet<Integer>(Arrays.asList(0, 1, 2, 3, 7, 8, 9, 10)), branches.get(0).getRemovedVertices());
@@ -95,7 +95,7 @@ public class DetectorTest {
         OrdinaryGenome guidedGenome = new OrdinaryGenome(Arrays.asList(5, 6,7,4,3,0,1,2));
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
-        Detector detector = new Detector(graph);
+        Detector detector = new Detector(graph, false);
         ArrayList<BaseAdequateSubgraph.Branch> branches = detector.search();
         assertEquals(2, branches.size());
     }

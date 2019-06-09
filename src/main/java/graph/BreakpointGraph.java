@@ -65,6 +65,9 @@ public class BreakpointGraph {
             while (!used.contains(half)) {
                 used.add(half);
                 String target = next.get(half);
+                if (target == null) {
+                    System.out.println(half);
+                }
                 DirectedGene.HalfGene targetHalfGene = DirectedGene.HalfGene.convertToHalf(target);
                 int sign = 1;
                 if (targetHalfGene.isHead()) {

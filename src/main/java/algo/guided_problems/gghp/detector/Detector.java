@@ -25,10 +25,11 @@ import algo.guided_problems.GGHPGraph;
 
 public class Detector extends BaseAdequateSubgraph {
     private GGHPGraph graph;
+    boolean isRestricted = false;
 
-
-    public Detector(GGHPGraph graph) {
+    public Detector(GGHPGraph graph, boolean isRestricted) {
         this.graph = graph;
+        this.isRestricted = isRestricted;
     }
 
     @Override
@@ -388,7 +389,9 @@ public class Detector extends BaseAdequateSubgraph {
             //
             if (!(neighbours.hasEdge(vertex, matchingVertex) || guidedTarget == matchingVertex)) {
                 // along edges only
-//                continue;
+                if (isRestricted) {
+                    continue;
+                }
             }
             if (vertex == matchingVertex) {
                 continue;

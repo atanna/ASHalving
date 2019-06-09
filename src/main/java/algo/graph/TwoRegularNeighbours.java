@@ -52,6 +52,8 @@ public class TwoRegularNeighbours extends Neighbours {
         evenCycles = new HashSet<>();
         oddCycles = new HashSet<>();
         int label = 0;
+        System.out.println("(for duplicated genome)");
+        System.out.print("cycle sizes: ");
         for (Iterator<Integer> it = getVertices().iterator(); it.hasNext(); ) {
             int vertex = it.next();
             if (cycles.containsKey(vertex)) {
@@ -74,7 +76,7 @@ public class TwoRegularNeighbours extends Neighbours {
 
 
             }
-            System.out.println(count);
+            System.out.print(count + " ");
             if (count % 2 == 0) {
 //                System.out.println(label + ": " + count);
                 evenCycles.add(label);
@@ -83,12 +85,12 @@ public class TwoRegularNeighbours extends Neighbours {
             }
             label++;
         }
+        System.out.println();
         cyclesCount = label;
         evenCyclesCount = evenCycles.size();
-        System.out.println("size: " + neighbours.size() + "  " + cycles.size());
         System.out.println("cycles count: " + cyclesCount + "   even: " + evenCyclesCount);
-//        System.out.println(cycles);
-//        System.out.println(evenCycles);
+        System.out.println();
+        System.out.println("n = " + neighbours.size());
     }
 
     public int recountEvenCyclesCount() {

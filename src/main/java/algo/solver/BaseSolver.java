@@ -26,12 +26,25 @@ public abstract class BaseSolver<T> {
     protected long startTime = 0;
     protected long finishTime = 0;
     protected long timeLimit = 2 * 60 * 60 * 1000; // 2 hours
+    protected boolean isRestricted = false;
     protected AtomicIntegerArray branchesCounter;
 
     protected abstract int getSize();
 
+    protected abstract int getFullDegree();
+
+    public int getDistance() {
+        return getFullDegree()*getSize() - currentSolution.getCyclesCount();
+    }
+
     public BaseSolver (T data) {
         this.data = data;
+        initQueue();
+    }
+
+    public BaseSolver (T data, boolean isRestricted) {
+        this.data = data;
+        this.isRestricted = isRestricted;
         initQueue();
     }
 
@@ -60,8 +73,14 @@ public abstract class BaseSolver<T> {
     }
 
     public boolean solveWithLimit(long limit) throws Exception {
+        return solveWithLimit(limit, isRestricted);
+    }
+
+    public boolean solveWithLimit(long limit, boolean isResticted) throws Exception {
         timeLimit = limit;
-        return solve();
+        this.isRestricted = isResticted;
+        boolean result = solve();
+        return result;
     }
 
     public boolean solve() throws Exception {
@@ -70,8 +89,8 @@ public abstract class BaseSolver<T> {
         boolean result = solve(INF);
 
         finishTime = System.currentTimeMillis();
-        System.out.println((finishTime +0. - startTime) / 1000/ 60  + " " + "min");
-        System.out.println((finishTime + 0. - startTime) / 1000/ 60 / 60 + " "  + "hours");
+//        System.out.println((finishTime +0. - startTime) / 1000/ 60  + " " + "min");
+//        System.out.println((finishTime + 0. - startTime) / 1000/ 60 / 60 + " "  + "hours");
         return result;
     }
 
@@ -131,14 +150,13 @@ public abstract class BaseSolver<T> {
     }
 
     public boolean solve(int maxIteration) throws Exception {
+        startTime = System.currentTimeMillis();
         if (pq.isEmpty()) {
             pq.add(getFirstState());
         }
 
         while (hasNextState() && (maxIteration == INF || resultCounts.iterations < maxIteration)) {
             if (isLimitReached()) {
-                System.out.println(startTime);
-                System.out.println(timeLimit);
                 System.out.println("Time limit");
                 break;
             }

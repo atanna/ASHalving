@@ -155,11 +155,11 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
             List<MainSolver> subTasks = new LinkedList<>();
 
             if (isLimitReached()) {
-                System.out.println(startTime);
-                System.out.println(timeLimit);
-                System.out.println(startTime + timeLimit);
-                System.out.println(System.currentTimeMillis());
-                System.out.println("Time limit");
+//                System.out.println(startTime);
+//                System.out.println(timeLimit);
+//                System.out.println(startTime + timeLimit);
+//                System.out.println(System.currentTimeMillis());
+//                System.out.println("Time limit");
                 return bestSolution;
             }
 
@@ -185,7 +185,7 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
             }
             computationTime = System.currentTimeMillis() - startTime;
 //            System.out.println("  finish " + name + "  " + computationTime / 1000 );
-            bestSolution.setExact(true);
+            bestSolution.setExact(exact);
             return bestSolution;
         }
 

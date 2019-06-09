@@ -47,11 +47,17 @@ public class Solver extends ParallelSolver<GGHPGraph> {
     }
 
     @Override
+    protected int getFullDegree() {
+        // ordinary degree + baseGenome degree  = 1 + 2
+        return 3;
+    }
+
+    @Override
     public List<State<GGHPGraph>> computeNextStates(State<GGHPGraph> state) throws Exception {
         ArrayList<State<GGHPGraph>> states = new ArrayList<>();
         ArrayList<BaseAdequateSubgraph.Branch> branches = new ArrayList<>();
         while (state.data.size() > 0) {
-            Detector detector = new Detector(state.data);
+            Detector detector = new Detector(state.data, isRestricted);
             branches = detector.search();
             if (branches.size() == 1) {
                 // explicit case
@@ -81,10 +87,10 @@ public class Solver extends ParallelSolver<GGHPGraph> {
         if (branches.size() > 1) {
             if (firstBruteForce == 0) {
                 firstBruteForce = 1;
-                System.out.println(state.data.size() + " first brute force");
+                System.out.println("Size = " + state.data.size() + " first brute force");
             }
             state.data.pushReconstruction();
-            Detector detector = new Detector(state.data);
+            Detector detector = new Detector(state.data, isRestricted);
             branches = detector.search();
 
             for (BaseAdequateSubgraph.Branch branch : branches) {
