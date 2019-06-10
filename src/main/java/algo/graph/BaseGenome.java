@@ -23,14 +23,9 @@ public class BaseGenome {
         return neighbours;
     }
 
-//    public int getCyclesCount() {
-//        return cyclesCount;
-//    }
-
     public BaseGenome getCopy() throws GenomeException {
         return new BaseGenome(neighbours.getCopy());
     }
-
 
     @Override
     public String toString() {

@@ -37,6 +37,10 @@ public class BreakpointGraph {
         return getNeighbours(name);
     }
 
+    public int getSize() {
+        return indexes.idToVertex.size();
+    }
+
     public Neighbours getNeighbours(String name) {
         return nbrs.get(name);
     }

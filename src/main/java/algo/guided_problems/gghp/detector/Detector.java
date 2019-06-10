@@ -2,18 +2,14 @@ package algo.guided_problems.gghp.detector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import algo.distance_problems.detector.BaseAdequateSubgraph;
+import algo.solver.BaseDetector;
 import algo.distance_problems.detector.DetectorException;
 import algo.graph.GenomeException;
 import algo.graph.Graph;
@@ -23,7 +19,7 @@ import algo.graph.TwoRegularNeighbours;
 import algo.guided_problems.GGHPGraph;
 
 
-public class Detector extends BaseAdequateSubgraph {
+public class Detector extends BaseDetector {
     private GGHPGraph graph;
     boolean isRestricted = false;
 

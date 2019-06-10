@@ -39,6 +39,10 @@ public class GenomeGraph {
             this.idToVertex = idToVertex;
             this.vertexToId = vertexToId;
         }
+
+        public int getSize() {
+            return idToVertex.size() / 2;
+        }
     }
 
     private HashMap<String, Vertex> vertices;

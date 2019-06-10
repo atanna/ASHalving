@@ -1,4 +1,4 @@
-package algo.distance_problems.detector;
+package algo.solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,11 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import algo.distance_problems.detector.DetectorException;
 import algo.graph.GenomeException;
 import algo.graph.Graph;
 
 
-public abstract class BaseAdequateSubgraph {
+public abstract class BaseDetector {
 
     public class Branch {
         private HashSet<Integer> removedVertices;
@@ -19,7 +20,6 @@ public abstract class BaseAdequateSubgraph {
         private List<Graph.Edge> resultedEdges;
         private int cyclesCount;
 
-        final int NONE_VALUE = -1;
 
         public Branch() {
             removedVertices = new HashSet<>();

@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import algo.distance_problems.detector.BaseAdequateSubgraph;
-import algo.graph.BaseGenome;
+import algo.solver.BaseDetector;
 import algo.graph.DuplicatedGenome;
 import algo.graph.Graph;
-import algo.graph.Neighbours;
 import algo.graph.OrdinaryGenome;
 import algo.graph.TwoRegularNeighbours;
 import algo.guided_problems.GGHPGraph;
@@ -36,9 +34,9 @@ public class DetectorTest {
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
         Detector detector = new Detector(graph, false);
-        ArrayList<BaseAdequateSubgraph.Branch> branches = detector.search();
+        ArrayList<BaseDetector.Branch> branches = detector.search();
         assertEquals(1, branches.size());
-        BaseAdequateSubgraph.Branch branch = branches.get(0);
+        BaseDetector.Branch branch = branches.get(0);
         assertEquals(4, branch.getResultedEdges().size());
         // 4
         assertEquals(new Graph.Edge(1, 2), branch.getResultedEdges().get(0));
@@ -72,7 +70,7 @@ public class DetectorTest {
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
         Detector detector = new Detector(graph, false);
-        ArrayList<BaseAdequateSubgraph.Branch> branches = detector.search();
+        ArrayList<BaseDetector.Branch> branches = detector.search();
         assertEquals(1, branches.size());
         assertEquals(new HashSet<Integer>(Arrays.asList(0, 1, 2, 3, 7, 8, 9, 10)), branches.get(0).getRemovedVertices());
     }
@@ -96,7 +94,7 @@ public class DetectorTest {
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
         Detector detector = new Detector(graph, false);
-        ArrayList<BaseAdequateSubgraph.Branch> branches = detector.search();
+        ArrayList<BaseDetector.Branch> branches = detector.search();
         assertEquals(2, branches.size());
     }
 }

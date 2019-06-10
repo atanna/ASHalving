@@ -226,9 +226,6 @@ public class Neighbours implements Serializable {
     }
 
     public int size() {
-//        if (neighbours.size() < removedVertices.size()) {
-//            throw new GenomeException("It's not possible case");
-//        }
         return neighbours.size() - removedVertices.size();
     }
 }

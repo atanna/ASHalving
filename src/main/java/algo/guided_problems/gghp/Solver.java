@@ -4,13 +4,12 @@ package algo.guided_problems.gghp;
 import java.util.ArrayList;
 import java.util.List;
 
-import algo.distance_problems.detector.BaseAdequateSubgraph;
+import algo.solver.BaseDetector;
 import algo.distance_problems.detector.DetectorException;
 import algo.graph.GenomeException;
 import algo.graph.Graph;
 import algo.guided_problems.GGHPGraph;
 import algo.guided_problems.gghp.detector.Detector;
-import algo.solver.BaseSolver;
 import algo.solver.ParallelSolver;
 import algo.solver.State;
 
@@ -55,13 +54,13 @@ public class Solver extends ParallelSolver<GGHPGraph> {
     @Override
     public List<State<GGHPGraph>> computeNextStates(State<GGHPGraph> state) throws Exception {
         ArrayList<State<GGHPGraph>> states = new ArrayList<>();
-        ArrayList<BaseAdequateSubgraph.Branch> branches = new ArrayList<>();
+        ArrayList<BaseDetector.Branch> branches = new ArrayList<>();
         while (state.data.size() > 0) {
             Detector detector = new Detector(state.data, isRestricted);
             branches = detector.search();
             if (branches.size() == 1) {
                 // explicit case
-                BaseAdequateSubgraph.Branch branch = branches.get(0);
+                BaseDetector.Branch branch = branches.get(0);
 //                if (state.data.size() > 20) {
 //                    System.out.println(
 //                            "explicit " + state.data.size() + "  - " + (branch.getResultedEdges().size() * 2) + " +"
@@ -93,7 +92,7 @@ public class Solver extends ParallelSolver<GGHPGraph> {
             Detector detector = new Detector(state.data, isRestricted);
             branches = detector.search();
 
-            for (BaseAdequateSubgraph.Branch branch : branches) {
+            for (BaseDetector.Branch branch : branches) {
                 GGHPGraph newGraph = state.data.getCopy();
                 ArrayList<Graph.Edge> newResultMatching = new ArrayList<>(state.resultMatching);
                 newResultMatching.addAll(newGraph.convertToRealEdges(branch.getResultedEdges()));

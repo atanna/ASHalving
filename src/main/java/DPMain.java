@@ -17,7 +17,7 @@ import algo.graph.OrdinaryGenome;
 import algo.graph.TwoRegularNeighbours;
 import algo.solver.Solution;
 
-public class DPName {
+public class DPMain {
     // Distance Problem
 
     public static void addMatching(ArrayList<ArrayList<Integer>> nbrs, int size, int seed, List<Integer> borders) {

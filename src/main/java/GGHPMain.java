@@ -1,11 +1,8 @@
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import algo.graph.DuplicatedGenome;
-import algo.graph.Graph;
 import algo.graph.Neighbours;
 import algo.graph.OrdinaryGenome;
 import algo.graph.TwoRegularNeighbours;
@@ -14,7 +11,6 @@ import algo.guided_problems.gghp.Solver;
 import algo.solver.Solution;
 import genome.Genome;
 import graph.BreakpointGraph;
-import io.Grimm;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -52,27 +48,9 @@ public class GGHPMain {
 
 
         Solver solver = tryToSolve(ordNeigbours, wgdNeigbours, timeLimit, isRestricted);
+
         Solution solution = solver.getCurrentSolution();
-
-        System.out.println("Distance: " + solver.getDistance());
-        System.out.println( solution);
-        System.out.println("IsRestricted: " + isRestricted);
-        ArrayList<Graph.Edge> edges = solver.getCurrentSolution().getResultMatching();
-        String resultedName = "GGHP_result";
-        if (isRestricted) {
-            resultedName = "C" + resultedName;
-        }
-        Genome result = graph.convertToGenome(edges, resultedName);
-
-        String comment =  String.join("\n# ", Arrays.asList(
-                nameTest,
-                "CyclesCount: " + solution.getCyclesCount(),
-                "Distance: " + solver.getDistance(),
-                "IsExact: " + solution.isExact(),
-                "IsRestricted: " + isRestricted
-        ));
-        Grimm.Writer.writeToFile(resultedPath, result, comment);
-
+        Common.writeResult(graph, solution, solver.getDistance(), resultedPath, isRestricted, "GGHP", nameTest);
     }
 
     public static algo.guided_problems.gghp.Solver tryToSolve(Neighbours ordNbrs, Neighbours wgdNbrs, int timeLimit, boolean isRestricted) throws Exception {
@@ -110,8 +88,8 @@ public class GGHPMain {
                 .addOption("w", "wgd", true, "Path to duplicated genome A")
                 .addOption("r", "result", true, "Resulted path")
                 .addOption("t", "time", true, "Time limit for solving problem (in seconds), default 60*60*2")
-                .addOption("p", "restricted",false, "flag for using restricted model, default = false")
-                .addOption("z", "dir", true,"Solve all problems from dir (use instead o, w, p)");
+                .addOption("p", "restricted",false, "Flag for using restricted model, default = false")
+                .addOption("z", "dir", true,"Solve all problems from dir (use instead o, w, r)");
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -135,7 +113,7 @@ public class GGHPMain {
 
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            formatter.printHelp("utility-name", options);
+            formatter.printHelp("GGHPMain", options);
 
             System.exit(1);
         }

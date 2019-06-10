@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import algo.distance_problems.detector.BaseAdequateSubgraph;
+import algo.solver.BaseDetector;
 import algo.graph.BaseGenome;
 import algo.graph.GenomeException;
 import algo.graph.Graph;
@@ -65,7 +65,7 @@ public class GGAPGraph extends Graph {
         return edges;
     }
 
-    public void lazyReconstruct(BaseAdequateSubgraph.Branch branch) {
+    public void lazyReconstruct(BaseDetector.Branch branch) {
         ArrayList<Integer> removed = new ArrayList<>(branch.getRemovedVertices());
 
         baseGenome.getNeighbours().lazyReconstruct(removed, branch.getAddedEdges().getOrDefault(BASE_NAME, new ArrayList<>()));
