@@ -5,11 +5,11 @@ solve Guided Genome Halving Problem
 
 cli options: 
 
-          -o,--ord <arg>      path to ordinary genome B
-          -p,--restricted     solve restricted problem, default = false
-          -r,--result <arg>   resulted path
+          -o,--ord <arg>      Path to ordinary genome B
+          -w,--wgd <arg>      Path to duplicated genome A
+          -r,--result <arg>   Resulted path
           -t,--time <arg>     Time limit for solving problem (in seconds), default 60*60*2
-          -w,--wgd <arg>      path to duplicated genome A
+          -p,--restricted     Flag for using restricted model, default = false
           -z,--dir <arg>      Solve all problems from dir (use instead o, w, p)
 
           

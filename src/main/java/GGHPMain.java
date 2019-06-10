@@ -106,11 +106,11 @@ public class GGHPMain {
         Options options = new Options();
 
         options
-                .addOption("o", "ord", true, "path to ordinary genome B")
-                .addOption("w", "wgd", true, "path to duplicated genome A")
-                .addOption("r", "result", true, "resulted path")
+                .addOption("o", "ord", true, "Path to ordinary genome B")
+                .addOption("w", "wgd", true, "Path to duplicated genome A")
+                .addOption("r", "result", true, "Resulted path")
                 .addOption("t", "time", true, "Time limit for solving problem (in seconds), default 60*60*2")
-                .addOption("p", "restricted",false, "solve restricted problem, default = false")
+                .addOption("p", "restricted",false, "flag for using restricted model, default = false")
                 .addOption("z", "dir", true,"Solve all problems from dir (use instead o, w, p)");
 
         CommandLineParser parser = new DefaultParser();
