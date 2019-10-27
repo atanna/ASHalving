@@ -13,10 +13,6 @@ import algo.solver.State;
 public class ShrinkApplyer implements Serializable {
     
 
-    public static ArrayList<BaseGenome> shrinkInPlace(BaseGenome startGenome, BaseDetector.Branch branch) {
-        return null;
-    }
-
     public static ArrayList<State<BaseGenome>> shrink(State<BaseGenome> state, BaseDetector.Branch branch)
             throws GenomeException
     {

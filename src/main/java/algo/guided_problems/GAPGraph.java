@@ -1,5 +1,6 @@
 package algo.guided_problems;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,35 +9,35 @@ import algo.solver.BaseDetector;
 import algo.graph.BaseGenome;
 import algo.graph.GenomeException;
 import algo.graph.Graph;
-import algo.graph.OrdinaryGenome;
 
 
-public class GGAPGraph extends GAPGraph {
-    protected OrdinaryGenome guidedGenome;
-    final static String GUIDED_NAME = "guided";
+public class GAPGraph extends Graph {
+    protected List<Integer> indexes;
+    protected BaseGenome baseGenome;
+    protected int fullDegree = 0;
 
-    public GGAPGraph(BaseGenome baseGenome, OrdinaryGenome guidedGenome) throws GenomeException {
+    final static String BASE_NAME = "base";
+
+    public int getFullDegree() {
+        return fullDegree;
+    }
+
+    public GAPGraph() {}
+
+
+    public GAPGraph(BaseGenome baseGenome) {
         super();
         this.baseGenome = baseGenome;
-        this.guidedGenome = guidedGenome;
-//        validate();
-
         genomes.put(BASE_NAME, baseGenome);
-        genomes.put(GUIDED_NAME, guidedGenome);
 
         postInit();
     }
 
-    public GGAPGraph(BaseGenome baseGenome, OrdinaryGenome guidedGenome, List<Integer> indexes) throws GenomeException {
-        this(baseGenome, guidedGenome);
+    public GAPGraph(BaseGenome baseGenome, List<Integer> indexes) throws GenomeException {
+        this(baseGenome);
         this.indexes = indexes;
     }
 
-    private void validate() throws GenomeException {
-        if (this.baseGenome.getNeighbours().size() != this.guidedGenome.getNeighbours().size()) {
-            throw new GGAPException("Sizes of genomes are not equal");
-        }
-    }
 
     private void postInit() {
         int size = baseGenome.getNeighbours().getRealSize();
@@ -45,25 +46,15 @@ public class GGAPGraph extends GAPGraph {
             indexes.add(i);
         }
         fullDegree = 0;
-//        for (BaseGenome genome : genomes.values()) {
-//            fullDegree += genome.getDegree();
-//        }
+        for (BaseGenome genome : genomes.values()) {
+            fullDegree += genome.getDegree();
+        }
     }
 
     public BaseGenome getBaseGenome() {
         return baseGenome;
     }
 
-    public OrdinaryGenome getGuidedGenome() {
-        return guidedGenome;
-    }
-
-    public static HashMap<String, List<Edge>> convertToEdgesMap(List<Edge> baseEdges, List<Edge> guidedEdges) {
-        HashMap<String, List<Edge>> edges = new HashMap<>();
-        edges.put(BASE_NAME, baseEdges);
-        edges.put(GUIDED_NAME, guidedEdges);
-        return edges;
-    }
 
     public static HashMap<String, List<Edge>> convertToEdgesMap(List<Edge> baseEdges) {
         HashMap<String, List<Edge>> edges = new HashMap<>();
@@ -75,17 +66,15 @@ public class GGAPGraph extends GAPGraph {
         ArrayList<Integer> removed = new ArrayList<>(branch.getRemovedVertices());
 
         baseGenome.getNeighbours().lazyReconstruct(removed, branch.getAddedEdges().getOrDefault(BASE_NAME, new ArrayList<>()));
-        guidedGenome.getNeighbours().lazyReconstruct(removed, branch.getAddedEdges().getOrDefault(GUIDED_NAME, new ArrayList<>()));
     }
 
     public void pushReconstruction() {
         baseGenome.getNeighbours().applyForceReconstruction();
-        guidedGenome.getNeighbours().applyForceReconstruction();
         indexes = baseGenome.getNeighbours().indexes;
     }
 
-    public GGAPGraph getCopy() throws GenomeException {
-        GGAPGraph graph = new GGAPGraph(baseGenome.getCopy(), guidedGenome.getCopy(), new ArrayList<>(indexes));
+    public GAPGraph getCopy() throws GenomeException {
+        GAPGraph graph = new GAPGraph(baseGenome.getCopy(), new ArrayList<Integer>(indexes));
         return graph;
     }
 

@@ -2,9 +2,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import algo.graph.DuplicatedGenome;
+import algo.graph.GenomeException;
 import algo.graph.OrdinaryGenome;
 import algo.guided_problems.GGHPGraph;
 import algo.guided_problems.gghp.Solver;
+import algo.ugap.solver.BaseSolver;
+import algo.ugap.solver.gghp.GGHPState;
+import algo.ugap.solver.ParallelSolver;
+import algo.ugap.solver.SeqSolver;
 
 public class Generate {
 
@@ -160,7 +165,80 @@ public class Generate {
 
     }
 
+    public static void testOldParallel(GGHPGraph graph) throws Exception {
+        algo.guided_problems.gghp.Solver solver = new Solver(graph);
+        solver.solveWithLimit(-1);
+
+        System.out.println("cycles: " +
+                solver.getCurrentSolution().getCyclesCount()
+        );
+
+        System.out.println(solver.getSolutionTime() / 1000);
+        System.out.println(solver.getSolutionTime());
+
+    }
+
+    public static void genTestParallel(GGHPGraph graph) throws Exception {
+
+        GGHPState firstState = new GGHPState(graph);
+//        SeqSolver solver = new SeqSolver(firstState);
+        BaseSolver solver = new ParallelSolver(firstState);
+        solver.solve();
+
+        System.out.println("cycles: " +
+                solver.getCurrentSolution().getCyclesCount()
+        );
+
+//        System.out.println(solver.firstBruteForce);
+        System.out.println(solver.getSolutionTime() / 1000);
+        System.out.println(solver.getSolutionTime());
+    }
+
+    public static void genTestSequence(GGHPGraph graph) throws Exception {
+
+        GGHPState firstState = new GGHPState(graph);
+        BaseSolver solver = new SeqSolver(firstState);
+        solver.solve();
+
+        System.out.println("cycles: " +
+                solver.getCurrentSolution().getCyclesCount()
+        );
+
+//        System.out.println(solver.firstBruteForce);
+        System.out.println(solver.getSolutionTime() / 1000);
+        System.out.println(solver.getSolutionTime());
+    }
+
+    public static GGHPGraph getGraph(int seed, int n, double p) throws GenomeException {
+        Random random = new Random(seed);
+        int seed1 = random.nextInt();
+        int seed2 = random.nextInt();
+        int rearrangements = (int)(n * p) / 2;
+        System.out.println(rearrangements);
+        ArrayList<ArrayList<Integer>> genome = generate(n, random.nextInt());
+        ArrayList<ArrayList<Integer>> doubleGenome = getDoubleGenome(genome);
+        mutateGenome(doubleGenome, rearrangements, seed1);
+        mutateGenome(genome, rearrangements, seed2);
+
+        return new GGHPGraph(new DuplicatedGenome(doubleGenome), new OrdinaryGenome(genome));
+    }
+
+    public static void runTest(int size, double p) throws Exception {
+        int seed = 525;
+        GGHPGraph graph1 = getGraph(seed, size, p);
+        GGHPGraph graph2 = getGraph(seed, size, p);
+        GGHPGraph graph3 = getGraph(seed, size, p);
+
+
+        testOldParallel(graph1);
+        genTestParallel(graph2);
+        genTestSequence(graph3);
+
+    }
+
     public static void main(String[] args) throws Exception {
+        runTest(100, 0.2);
+
         int seed = 5;
 
         seed = (new Random()).nextInt();
@@ -169,28 +247,85 @@ public class Generate {
 
         System.out.println(seed);
         Random random = new Random(seed);
+//        BufferedWriter writer = new BufferedWriter(new FileWriter("test3", true));
+//        BufferedWriter writer = new BufferedWriter(new FileWriter("testbig", true));
+//        BufferedWriter writer = new BufferedWriter(new FileWriter("GeneratedResultsBF", true));
+//        for (int n = 50; n < 12000; n += 50 ) {
+////        for (int n = 50; n < 150; n += 50 ) {
+//                for (double p : Arrays.asList(0.1, 0.2 ,0.3, 0.4, 0.5)) {
+////                for (double p : Arrays.asList(0.25, 0.5, 0.75, 1., 1.25, 1.5)) {
+//                    for (int i = 0; i < 10; ++i) {
+////                    for (int i = 0; i < 3; ++i) {
+//                    ArrayList<ArrayList<Integer>> genome = generate(n, random.nextInt());
+//
+//                    ArrayList<ArrayList<Integer>> doubleGenome = getDoubleGenome(genome);
+////                    int n = 10;
+////                    double p = 0.2;
+//
+//
+//                    int seed1 = random.nextInt();
+//                    int seed2 = random.nextInt();
+//                    int rearrangements = (int)(n * p) / 2;
+//                    mutateGenome(doubleGenome, rearrangements, seed1);
+//                    mutateGenome(genome, rearrangements, seed2);
+//
+//                    System.out.println(genome);
+//                    System.out.println(doubleGenome);
+//
+//                    GGHPGraph graph = new GGHPGraph(new DuplicatedGenome(doubleGenome), new OrdinaryGenome(genome));
+//
+//
+//                    algo.guided_problems.gghp.Solver solver = new Solver(graph);
+//
+//                    solver.solveWithLimit(1 * 20 * 1000);
+////                    solver.solveWithLimit(60 * 60 * 1000);
+//
+//                    System.out.println(solver.getCurrentSolution());
+//
+//
+//                    System.out.println(solver.firstBruteForce);
+//                    System.out.println(solver.getSolutionTime() / 1000);
+//                    Solution result = solver.getCurrentSolution();
+//                    writer.append(
+//                            n + " " +
+//                                    rearrangements + " " +
+//                                    solver.firstBruteForce + " " +
+//                                    result.isExact() + " " +
+//                                    solver.getDistance() + " " +
+//                                    solver.getSolutionTime() + " " +
+//                                    p + " " +
+//                                    "\n"
+//                    );
+//                    writer.flush();
+//                }
+//            }
+//        }
+//        writer.flush();
 
-        ArrayList<ArrayList<Integer>> genome = generate(28, random.nextInt());
+//        String name = "TMPR/tmp" + random.nextInt();
+//        File file = new File(name);
+//        ObjectOutputStream oout = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+//        oout.writeObject(graph);
+//        oout.writeObject(graph);
+//        oout.close();
+//        oout.flush();
+//
+//
+//        GGHPGraph readedGraph;
+//        ObjectInputStream oin = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+//        int cc = 0; // DELETE
+//        try {
+//            readedGraph = (GGHPGraph) oin.readObject();
+//            System.out.println(readedGraph.getCyclesCount());
+//            readedGraph = (GGHPGraph) oin.readObject();
+//            System.out.println( readedGraph.getCyclesCount());
+//        } catch (IOException ioe) {
+//            ;
+//        }
+//        oin.close();
 
-        ArrayList<ArrayList<Integer>> doubleGenome = getDoubleGenome(genome);
 
 
-        int seed1 = random.nextInt();
-        int seed2 = random.nextInt();
-        mutateGenome(doubleGenome, 100, seed1);
-        mutateGenome(genome, 100, seed2);
-
-        System.out.println(genome);
-        System.out.println(doubleGenome);
-
-        GGHPGraph graph = new GGHPGraph(new DuplicatedGenome(doubleGenome), new OrdinaryGenome(genome));
-
-        algo.guided_problems.gghp.Solver solver = new Solver(graph);
-        solver.solve();
-
-        System.out.println(solver.getCurrentSolution());
-
-        String result  = solver.getCurrentSolution().toString();
     }
 
 }

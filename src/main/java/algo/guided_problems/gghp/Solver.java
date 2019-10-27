@@ -54,7 +54,7 @@ public class Solver extends ParallelSolver<GGHPGraph> {
     @Override
     public List<State<GGHPGraph>> computeNextStates(State<GGHPGraph> state) throws Exception {
         ArrayList<State<GGHPGraph>> states = new ArrayList<>();
-        ArrayList<BaseDetector.Branch> branches = new ArrayList<>();
+        List<BaseDetector.Branch> branches = new ArrayList<>();
         while (state.data.size() > 0) {
             Detector detector = new Detector(state.data, isRestricted);
             branches = detector.search();
@@ -84,8 +84,8 @@ public class Solver extends ParallelSolver<GGHPGraph> {
             }
         }
         if (branches.size() > 1) {
-            if (firstBruteForce == 0) {
-                firstBruteForce = 1;
+            if (firstBruteForce == 0 || firstBruteForce < state.data.size()) {
+                firstBruteForce = state.data.size();
                 System.out.println("Size = " + state.data.size() + " first brute force");
             }
             state.data.pushReconstruction();
@@ -109,9 +109,9 @@ public class Solver extends ParallelSolver<GGHPGraph> {
 //            System.out.println(state.resultMatching.size() + " " + st.resultMatching.size());
 //        }
 
-        if (states.size() > 1) {
-            branchesCounter.getAndIncrement(state.resultMatching.size());
-        }
+//        if (states.size() > 1) {
+//            branchesCounter.getAndIncrement(state.resultMatching.size());
+//        }
         return states;
     }
 

@@ -1,9 +1,10 @@
 package algo.graph;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BaseGenome {
+public class BaseGenome implements Serializable {
 
     protected Neighbours neighbours;
 

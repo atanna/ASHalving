@@ -106,6 +106,6 @@ public abstract class BaseDetector {
 
     public abstract Branch searchExplicitBranch() throws DetectorException, GenomeException;
 
-    public abstract ArrayList<Branch> search() throws Exception;
+    public abstract List<Branch> search() throws Exception;
 
 }

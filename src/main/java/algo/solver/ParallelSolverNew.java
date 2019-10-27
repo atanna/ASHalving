@@ -12,16 +12,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
-public abstract class ParallelSolver<T> extends BaseSolver<T> {
+public abstract class ParallelSolverNew<T> extends BaseSolver<T> {
 
     private volatile AtomicInteger atomicLowerBound;
     private volatile AtomicInteger atomicUpperBound;
 
-    public ParallelSolver(T data) {
+    public ParallelSolverNew(T data) {
         super(data);
         atomicLowerBound = new AtomicInteger(-1);
         atomicUpperBound = new AtomicInteger(-1);
@@ -29,13 +30,18 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
 
     public boolean solve(int maxIterariton) throws Exception {
         BaseNode root = new Node(getFirstState());
-        currentSolution = new ForkJoinPool().invoke(new MainSolver(root, ""));
+        branchesCounter = new AtomicIntegerArray(getSize());
+        new ForkJoinPool().invoke(new MainSolver(root));
 
+
+        if (isLimitReached()) {
+            return false;
+        }
         return true;
     }
 
     public static abstract class BaseNode {
-        abstract Collection<BaseNode> getNextStates() throws Exception;
+        abstract Collection<BaseNode> getNextStates();
 
         abstract String getName();
 
@@ -76,8 +82,8 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
         }
 
         @Override
-        Collection<BaseNode> getNextStates() throws Exception {
-//            try {
+        Collection<BaseNode> getNextStates() {
+            try {
                 updateAtomicBounds(state);
                 if (isMissState(state)) {
                     return List.of();
@@ -89,11 +95,25 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
                     }
                     nodes.add(new Node(s));
                 }
+                if (nodes.size() == 0) {
+                    Solution solution = getSolution();
+                    if (currentSolution.isBetter(solution)) {
+
+//                        lock.writeLock().lock();
+//                        try {
+//                            sleep(1);
+//                            map.put("foo", "bar");
+//                        } finally {
+//                            lock.writeLock().unlock();
+//                        }
+                        currentSolution.updateIfBeter(getSolution());
+                    }
+                }
                 return nodes;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return List.of();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return List.of();
         }
 
         @Override
@@ -116,60 +136,27 @@ public abstract class ParallelSolver<T> extends BaseSolver<T> {
 
     };
 
-    public class MainSolver extends RecursiveTask<Solution> {
+    public class MainSolver extends RecursiveAction {
         private final BaseNode node;
-        String name;
-        private long computationTime = 0;
 
-        public MainSolver(BaseNode state, String name) {
+        public MainSolver(BaseNode state) {
             this.node = state;
-            this.name = name;
         }
 
         @Override
-        protected Solution compute() {
-
-//            long startTime = System.currentTimeMillis();
-            boolean exact = true;
+        protected void compute() {
 
 
-
-            Solution bestSolution = node.getSolution();
-            List<MainSolver> subTasks = new LinkedList<>();
             if (isLimitReached()) {
-//                System.out.println(startTime);
-//                System.out.println(timeLimit);
-//                System.out.println(startTime + timeLimit);
-//                System.out.println(System.currentTimeMillis());
-                System.out.println("Time limit");
-                return bestSolution;
+                return;
             }
 
-            int i = 0;
-            try {
-                for(BaseNode child : node.getNextStates()) {
-                    ++i;
-                    String childName = name + "_" + i;
-                    MainSolver task = new MainSolver(child, childName);
-                    task.fork(); // запустим асинхронно
-                    subTasks.add(task);
-                }
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-            node.updateIfBetter(bestSolution);
+            for(BaseNode child : node.getNextStates()) {
 
-            for(MainSolver task : subTasks) {
-                Solution solution = task.join();
-                if (!solution.isExact()) {
-                    exact = false;
-                }
-                bestSolution.updateIfBeter(solution);
+                MainSolver task = new MainSolver(child);
+                task.fork();
             }
-            computationTime = System.currentTimeMillis() - startTime;
-//            System.out.println("  finish " + name + "  " + computationTime / 1000 );
-            bestSolution.setExact(exact);
-            return bestSolution;
+
         }
 
     }

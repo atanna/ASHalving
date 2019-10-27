@@ -39,7 +39,7 @@ public class Detector extends BaseDetector {
         return branch;
     }
 
-    public ArrayList<Branch> search() throws DetectorException, GenomeException {
+    public List<Branch> search() throws DetectorException, GenomeException {
         ArrayList<Branch> branches = new ArrayList<>();
         Branch branch = searchExplicitBranch();
         if (branch.isNotEmpty()) {
@@ -379,74 +379,91 @@ public class Detector extends BaseDetector {
 //            }
 //        }
 //        for (int matchingVertex : matchingCandidates) {
+
+        HashSet<Integer> used = new HashSet<>();
+        for (int target : targets) {
+            addBranchAlongEdgeToResult(vertex, target, result, guidedGenome, neighbours, guidedTarget, targets);
+            used.add(target);
+        }
+        addBranchAlongEdgeToResult(vertex, guidedTarget, result, guidedGenome, neighbours, guidedTarget, targets);
+        used.add(guidedTarget);
+
         for (Iterator<Integer> it = neighbours.getVertices().iterator(); it.hasNext(); ) {
             int matchingVertex = it.next();
-
-            //
-            if (!(neighbours.hasEdge(vertex, matchingVertex) || guidedTarget == matchingVertex)) {
-                // along edges only
-                if (isRestricted) {
-                    continue;
-                }
-            }
-            if (vertex == matchingVertex) {
+            if (used.contains(matchingVertex)) {
                 continue;
             }
-            int guidedMatchingVertexTarget = guidedGenome.getNeighbour(matchingVertex);
 
-            int cyclesCount = 0;
-            ArrayList<Graph.Edge> baseEdgesAdded = new ArrayList<>();
-            ArrayList<Graph.Edge> guideEdgesAdded = new ArrayList<>();
-            if (guidedTarget != matchingVertex) {
-                guideEdgesAdded.add(new Graph.Edge(guidedTarget, guidedMatchingVertexTarget));
-            } else {
-                cyclesCount++;
+            addBranchAlongEdgeToResult(vertex, matchingVertex, result, guidedGenome, neighbours, guidedTarget, targets);
+        }
+        return result;
+    }
+
+    private void addBranchAlongEdgeToResult(int vertex, int matchingVertex, ArrayList<Branch> result, OrdinaryGenome guidedGenome, Neighbours neighbours, int guidedTarget, Integer[] targets)
+            throws GenomeException
+    {
+
+        if (!(neighbours.hasEdge(vertex, matchingVertex) || guidedTarget == matchingVertex)) {
+            // along edges only
+            if (isRestricted) {
+                return;
             }
+        }
+        if (vertex == matchingVertex) {
+            return;
+        }
+        int guidedMatchingVertexTarget = guidedGenome.getNeighbour(matchingVertex);
 
-            Integer[] matchingTargets = neighbours.getSortedVertexNeighbours(matchingVertex).toArray(Integer[]::new);
+        int cyclesCount = 0;
+        ArrayList<Graph.Edge> baseEdgesAdded = new ArrayList<>();
+        ArrayList<Graph.Edge> guideEdgesAdded = new ArrayList<>();
+        if (guidedTarget != matchingVertex) {
+            guideEdgesAdded.add(new Graph.Edge(guidedTarget, guidedMatchingVertexTarget));
+        } else {
+            cyclesCount++;
+        }
 
-            if (targets[0] == vertex) {
-                if (matchingTargets[0] == matchingVertex) {
-                    cyclesCount++;
-                } else {
-                    baseEdgesAdded.add(new Graph.Edge(matchingTargets[0], matchingTargets[1]));
-                }
-            } else if (matchingTargets[0] == matchingVertex) {
-                baseEdgesAdded.add(new Graph.Edge(targets[0], targets[1]));
-            } else if (targets[0] == matchingVertex) {
+        Integer[] matchingTargets = neighbours.getSortedVertexNeighbours(matchingVertex).toArray(Integer[]::new);
+
+        if (targets[0] == vertex) {
+            if (matchingTargets[0] == matchingVertex) {
                 cyclesCount++;
-                if (targets[1] == matchingVertex) {
-                    cyclesCount++;
-                } else {
-                    int matchingTarget = matchingTargets[0];
-                    if (matchingTarget == vertex) {
-                        matchingTarget = matchingTargets[1];
-                    }
-                    baseEdgesAdded.add(new Graph.Edge(targets[1], matchingTarget));
-                }
-            } else if (targets[1] == matchingVertex) {
+            } else {
+                baseEdgesAdded.add(new Graph.Edge(matchingTargets[0], matchingTargets[1]));
+            }
+        } else if (matchingTargets[0] == matchingVertex) {
+            baseEdgesAdded.add(new Graph.Edge(targets[0], targets[1]));
+        } else if (targets[0] == matchingVertex) {
+            cyclesCount++;
+            if (targets[1] == matchingVertex) {
                 cyclesCount++;
+            } else {
                 int matchingTarget = matchingTargets[0];
                 if (matchingTarget == vertex) {
                     matchingTarget = matchingTargets[1];
                 }
-                baseEdgesAdded.add(new Graph.Edge(targets[0], matchingTarget));
-            } else {
-                ArrayList<Graph.Edge> edges = new ArrayList<>();
-                edges.add(new Graph.Edge(targets[0], matchingTargets[1]));
-                edges.add(new Graph.Edge(targets[1], matchingTargets[0]));
-
-                result.add(getBranch(edges, guideEdgesAdded, Arrays.asList(new Graph.Edge(vertex, matchingVertex)), cyclesCount));
-
-                baseEdgesAdded.add(new Graph.Edge(targets[0], matchingTargets[0]));
-                baseEdgesAdded.add(new Graph.Edge(targets[1], matchingTargets[1]));
+                baseEdgesAdded.add(new Graph.Edge(targets[1], matchingTarget));
             }
+        } else if (targets[1] == matchingVertex) {
+            cyclesCount++;
+            int matchingTarget = matchingTargets[0];
+            if (matchingTarget == vertex) {
+                matchingTarget = matchingTargets[1];
+            }
+            baseEdgesAdded.add(new Graph.Edge(targets[0], matchingTarget));
+        } else {
+            ArrayList<Graph.Edge> edges = new ArrayList<>();
+            edges.add(new Graph.Edge(targets[0], matchingTargets[1]));
+            edges.add(new Graph.Edge(targets[1], matchingTargets[0]));
 
+            result.add(getBranch(edges, guideEdgesAdded, Arrays.asList(new Graph.Edge(vertex, matchingVertex)), cyclesCount));
 
-            result.add(getBranch(baseEdgesAdded, guideEdgesAdded, Arrays.asList(new Graph.Edge(vertex, matchingVertex)), cyclesCount));
-
+            baseEdgesAdded.add(new Graph.Edge(targets[0], matchingTargets[0]));
+            baseEdgesAdded.add(new Graph.Edge(targets[1], matchingTargets[1]));
         }
-        return result;
+
+
+        result.add(getBranch(baseEdgesAdded, guideEdgesAdded, Arrays.asList(new Graph.Edge(vertex, matchingVertex)), cyclesCount));
     }
 
     private Branch getBranch(List<Graph.Edge> baseEdgesAdded, List<Graph.Edge> guideEdgesAdded, List<Graph.Edge> resultedEdges, int cyclesCount) {

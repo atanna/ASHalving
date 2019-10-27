@@ -19,7 +19,7 @@ cli options:
 
 
 #### GAPMain 
-solve Genome Aliquoting Problem
+solve Genome Aliquoting Problem (m<4)
 
 cli options:
  

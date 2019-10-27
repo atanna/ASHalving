@@ -3,6 +3,7 @@ package algo.guided_problems.gghp.detector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import algo.solver.BaseDetector;
 import algo.graph.DuplicatedGenome;
@@ -34,7 +35,7 @@ public class DetectorTest {
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
         Detector detector = new Detector(graph, false);
-        ArrayList<BaseDetector.Branch> branches = detector.search();
+        List<BaseDetector.Branch> branches = detector.search();
         assertEquals(1, branches.size());
         BaseDetector.Branch branch = branches.get(0);
         assertEquals(4, branch.getResultedEdges().size());
@@ -70,7 +71,7 @@ public class DetectorTest {
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
         Detector detector = new Detector(graph, false);
-        ArrayList<BaseDetector.Branch> branches = detector.search();
+        List<BaseDetector.Branch> branches = detector.search();
         assertEquals(1, branches.size());
         assertEquals(new HashSet<Integer>(Arrays.asList(0, 1, 2, 3, 7, 8, 9, 10)), branches.get(0).getRemovedVertices());
     }
@@ -94,7 +95,7 @@ public class DetectorTest {
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
         Detector detector = new Detector(graph, false);
-        ArrayList<BaseDetector.Branch> branches = detector.search();
+        List<BaseDetector.Branch> branches = detector.search();
         assertEquals(2, branches.size());
     }
 }

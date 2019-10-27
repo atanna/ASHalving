@@ -1,8 +1,9 @@
 package algo.graph;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Graph {
+public abstract class Graph implements Serializable {
 
     public static class OrderedEdge {
         public int source = 0;
@@ -69,4 +70,6 @@ public class Graph {
                 genomes.entrySet().stream().map(entry -> String.valueOf(entry.getKey() + ":\n" + String.valueOf(entry.getValue()))).toArray(String[]::new));
         return result;
     }
+
+    public abstract int size();
 }

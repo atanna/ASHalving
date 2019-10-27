@@ -34,7 +34,7 @@ public abstract class BaseSolver<T> {
     protected abstract int getFullDegree();
 
     public int getDistance() {
-        return getFullDegree()*getSize() - currentSolution.getCyclesCount();
+        return getFullDegree()*getSize() / 2 - currentSolution.getCyclesCount();
     }
 
     public BaseSolver (T data) {
@@ -146,6 +146,9 @@ public abstract class BaseSolver<T> {
     }
 
     boolean isLimitReached() {
+        if (timeLimit == -1) {
+            return false;
+        }
         return startTime + timeLimit <  System.currentTimeMillis();
     }
 
@@ -194,6 +197,10 @@ public abstract class BaseSolver<T> {
 
     public Solution getCurrentSolution() {
         return currentSolution;
+    }
+
+    public long getSolutionTime() {
+        return finishTime - startTime;
     }
 
     public int getCurrentCyclesCount() {
