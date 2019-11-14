@@ -3,6 +3,7 @@ package algo.ugap.solver.gap3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class GAP3Detector extends Detector {
     public Branch search2() {
         Branch resultedBranch = new Branch();
         Neighbours neighbours = graph.getBaseGenome().getNeighbours();
+        HashSet<Integer> verticesWithLoops = new HashSet<>();
         for (Iterator<Integer> it = neighbours.getVertices().iterator(); it.hasNext(); ) {
             int vertex = it.next();
             Map<Integer, Long> counts =
@@ -52,18 +54,28 @@ public class GAP3Detector extends Detector {
 
             }
             if (counts.size() == 2) {
-                int target = targetDegree2;
                 int targetTarget = -1;
-                for (Iterator<Integer> iter = neighbours.getVertexNeighbours(target).iterator(); iter.hasNext(); ) {
-                    targetTarget = iter.next();
-//                    targetTarget = it2.next();
-                    if (targetTarget != vertex) {
-                        break;
+                if (vertex == targetDegree2) {
+                    if (verticesWithLoops.contains(targetDegree1)) {
+                        resultedBranch.merge(
+                                getBranch(List.of(), Arrays.asList(new Graph.Edge(targetDegree1, vertex)), 2)
+                        );
+                    } else if (vertex < targetDegree1) {
+                        verticesWithLoops.add(vertex);
                     }
+                } else {
+                    for (Iterator<Integer> iter = neighbours.getVertexNeighbours(targetDegree2).iterator();
+                            iter.hasNext(); ) {
+                        targetTarget = iter.next();
+                        if (targetTarget != vertex) {
+                            break;
+                        }
+                    }
+                    resultedBranch.merge(
+                            getBranch(Arrays.asList(new Graph.Edge(targetDegree1, targetTarget)),
+                                    Arrays.asList(new Graph.Edge(vertex, targetDegree2)), 2)
+                    );
                 }
-                resultedBranch.merge(
-                        getBranch(Arrays.asList(new Graph.Edge(targetDegree1, targetTarget)), Arrays.asList(new Graph.Edge(vertex, target)), 2)
-                );
             }
         }
         return resultedBranch;
