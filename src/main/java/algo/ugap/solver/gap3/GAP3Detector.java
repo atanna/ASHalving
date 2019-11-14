@@ -21,7 +21,7 @@ public class GAP3Detector extends Detector {
     }
 
     @Override
-    protected Branch search2() {
+    public Branch search2() {
         Branch resultedBranch = new Branch();
         Neighbours neighbours = graph.getBaseGenome().getNeighbours();
         for (Iterator<Integer> it = neighbours.getVertices().iterator(); it.hasNext(); ) {

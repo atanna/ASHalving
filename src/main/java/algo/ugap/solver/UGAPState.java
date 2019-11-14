@@ -32,7 +32,7 @@ public abstract class UGAPState extends State {
         return result;
     }
 
-    protected int getSize() {
+    public int getSize() {
         return data.size();
     }
 
