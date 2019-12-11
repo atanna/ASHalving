@@ -316,20 +316,20 @@ public class GGHPDetector extends Detector {
                     processed.add(vertex);
                     processed.add(nextVertex);
                     processed.add(nextNextVertex);
-//                    continue;
+                    continue;
                     // cycle size = 4
                     // 1;
-                    List<Graph.Edge> newGuidedEdges1 = new ArrayList<>();//Arrays.asList(new Graph.Edge(guidedPrevPrev, guidedNext),new Graph.Edge(guidedPrev, guidedVertex));
-                    newGuidedEdges1.add(new Graph.Edge(guidedPrevPrev, guidedNext));
-                    newGuidedEdges1.add(new Graph.Edge(guidedPrev, guidedVertex));
-                    result.add(getBranch(List.of(), newGuidedEdges1, Arrays.asList(new Graph.Edge(prevPrevVertex, nextVertex), new Graph.Edge(prevVertex, vertex)), 3));
-
-                    List<Graph.Edge> newGuidedEdges2 = new ArrayList<>();;
-                    newGuidedEdges2.add(new Graph.Edge(guidedPrevPrev, guidedPrev));
-                    newGuidedEdges2.add(new Graph.Edge(guidedNext, guidedVertex));
-                    result.add(getBranch(List.of(), newGuidedEdges2, Arrays.asList(new Graph.Edge(prevPrevVertex, prevVertex), new Graph.Edge(nextVertex, vertex)), 3));
-
-                    return result;
+//                    List<Graph.Edge> newGuidedEdges1 = new ArrayList<>();//Arrays.asList(new Graph.Edge(guidedPrevPrev, guidedNext),new Graph.Edge(guidedPrev, guidedVertex));
+//                    newGuidedEdges1.add(new Graph.Edge(guidedPrevPrev, guidedNext));
+//                    newGuidedEdges1.add(new Graph.Edge(guidedPrev, guidedVertex));
+//                    result.add(getBranch(List.of(), newGuidedEdges1, Arrays.asList(new Graph.Edge(prevPrevVertex, nextVertex), new Graph.Edge(prevVertex, vertex)), 3));
+//
+//                    List<Graph.Edge> newGuidedEdges2 = new ArrayList<>();;
+//                    newGuidedEdges2.add(new Graph.Edge(guidedPrevPrev, guidedPrev));
+//                    newGuidedEdges2.add(new Graph.Edge(guidedNext, guidedVertex));
+//                    result.add(getBranch(List.of(), newGuidedEdges2, Arrays.asList(new Graph.Edge(prevPrevVertex, prevVertex), new Graph.Edge(nextVertex, vertex)), 3));
+//
+//                    return result;
                 }
 
                 while (!processed.contains(vertex)) {

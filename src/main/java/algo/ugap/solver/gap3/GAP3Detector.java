@@ -59,7 +59,7 @@ public class GAP3Detector extends Detector {
                         resultedBranch.merge(
                                 getBranch(List.of(), Arrays.asList(new Graph.Edge(targetDegree1, vertex)), 2)
                         );
-                    } else if (vertex < targetDegree1) {
+                    } else {
                         verticesWithLoops.add(vertex);
                     }
                 } else {
