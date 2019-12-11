@@ -63,8 +63,8 @@ public class GGHPMain {
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
         GGHPState firstState = new GGHPState(graph);
-        BaseSolver solver = new SeqSolver(firstState);
-//        BaseSolver solver = new ParallelSolver(firstState);
+//        BaseSolver solver = new SeqSolver(firstState);
+        BaseSolver solver = new ParallelSolver(firstState);
         if (timeLimit != -1) {
             solver.solveWithLimit(timeLimit, isRestricted);
         }
