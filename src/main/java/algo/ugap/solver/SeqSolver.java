@@ -89,7 +89,6 @@ public class SeqSolver extends BaseSolver {
     protected boolean innerSolve() throws GenomeException {
         if (pq.isEmpty()) {
             pq.add(getFirstState());
-
         }
 
         while (hasNextState()) {

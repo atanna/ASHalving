@@ -33,7 +33,6 @@ public class ParallelSolver extends BaseSolver {
         return true;
     }
 
-
     void updateAtomicBounds(State state) {
         if (state.getLowerBound().isPresent()) {
             int stateLowerBound = state.getLowerBound().get();
@@ -79,7 +78,6 @@ public class ParallelSolver extends BaseSolver {
         protected Solution compute() {
             boolean exact = true;
 
-
             Solution bestSolution = new Solution();
             bestSolution.update(state);
             List<MainSolver> subTasks = new LinkedList<>();
@@ -88,7 +86,7 @@ public class ParallelSolver extends BaseSolver {
                 return bestSolution;
             }
 
-            for(State newState : state.computeNextStates(isRestricted)) {
+            for (State newState : state.computeNextStates(isRestricted)) {
                 updateAtomicBounds(newState);
                 if (isMissState(newState)) {
                     continue;
@@ -98,8 +96,7 @@ public class ParallelSolver extends BaseSolver {
                 subTasks.add(task);
             }
 
-
-            for(MainSolver task : subTasks) {
+            for (MainSolver task : subTasks) {
                 Solution solution = task.join();
                 if (!solution.isExact()) {
                     exact = false;

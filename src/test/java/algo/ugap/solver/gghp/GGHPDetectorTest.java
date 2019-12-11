@@ -85,7 +85,7 @@ public class GGHPDetectorTest {
         solver.solve();
 
         int cyclesCount = solver.getCurrentSolution().getCyclesCount();
-        assertEquals(cyclesCount, 16);
+        assertEquals(16, cyclesCount);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class GGHPDetectorTest {
         SeqSolver solver = new SeqSolver(firstState);
         solver.solve();
         int cyclesCount = solver.getCurrentSolution().getCyclesCount();
-        assertEquals(cyclesCount, 16);
+        assertEquals(16, cyclesCount);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class GGHPDetectorTest {
         GGHPDetector detector = new GGHPDetector(graph, false);
         BaseDetector.Branch result = detector.search2();
         int cyclesCount = result.getCyclesCount();
-        assertEquals(cyclesCount, 7);
+        assertEquals(7, cyclesCount);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class GGHPDetectorTest {
         GGHPDetector detector = new GGHPDetector(graph, false);
         BaseDetector.Branch result = detector.search2();
         int cyclesCount = result.getCyclesCount();
-        assertEquals(cyclesCount, 0);
+        assertEquals(0, cyclesCount);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class GGHPDetectorTest {
             graph.pushReconstruction();
             operation_number++;
         }
-        assertEquals(operation_number, 3);
+        assertEquals(3, operation_number);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class GGHPDetectorTest {
         BaseDetector.Branch result = new BaseDetector.Branch();
         BaseDetector.Branch branch = detector.search2();
         detector.updateWithExplicit4(branch);
-        assertEquals(branch.getCyclesCount(), 11);
+        assertEquals(11, branch.getCyclesCount());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class GGHPDetectorTest {
         GGHPDetector detector = new GGHPDetector(graph, false);
         BaseDetector.Branch branch = detector.search2();
         detector.updateWithExplicit4(branch);
-        assertEquals(branch.getCyclesCount(), 0);
+        assertEquals(0, branch.getCyclesCount());
     }
 
     @Test
@@ -158,20 +158,8 @@ public class GGHPDetectorTest {
         int size = state.getSize();
         assertEquals(size, 6);
         List<State> states = state.computeNextStates(true);
-        assertEquals(states.size(), 1);
-        assertEquals(states.get(0).cyclesCount, 7);
-    }
-
-    @Test
-    public void searchNotExplicit4Test() throws Exception {
-        GGHPGraph graph = getSymTestGraph();
-        GGHPDetector detector = new GGHPDetector(graph, false);
-        List<BaseDetector.Branch> results = detector.searchNotExplicit4();
-        assertEquals(results.size(), 2);
-//        results.get(0).getRemovedVertices();
-//        graph.lazyReconstruct(results.get(0));
-//        graph.pushReconstruction();
-//        assertEquals(graph.size(), 4);
+        assertEquals(1,states.size());
+        assertEquals(7, states.get(0).cyclesCount);
     }
 
 }

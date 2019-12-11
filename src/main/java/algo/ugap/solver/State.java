@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import algo.ugap.graph.Graph;
 
-
+/**
+ * State ~ node of the search tree.
+ */
 public abstract class State {
     public int cyclesCount = 0;
     public List<Graph.Edge> resultMatching;
@@ -24,10 +26,16 @@ public abstract class State {
         lowerBound = Optional.empty();
     }
 
+    /**
+     * Return child nodes of the search tree.
+     */
     abstract public List<State> computeNextStates(boolean isRestricted);
 
     abstract public int getSize();
 
+    /**
+     * Skip the branch, if the current result cannot be improved.
+     */
     public boolean isMissedState() {
         return false;
     }

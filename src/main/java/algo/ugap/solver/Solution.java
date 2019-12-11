@@ -58,7 +58,6 @@ public class Solution {
         return resultMatching;
     }
 
-
     public void  update(Solution solution) {
         cyclesCount = solution.getCyclesCount();
         resultMatching = solution.resultMatching;
@@ -88,4 +87,3 @@ public class Solution {
     }
 
 }
-

@@ -10,15 +10,20 @@ import java.util.Map;
 import algo.ugap.graph.GenomeException;
 import algo.ugap.graph.Graph;
 
-
+/**
+ * Helper for detect good child states in the search.
+ */
 public abstract class BaseDetector {
 
+    /**
+     * Transition to the child state.
+     * Contain all info about shrinking part of the graph.
+     */
     public static class Branch {
         private HashSet<Integer> removedVertices;
         private HashMap<String, List<Graph.Edge>> addedEdges;
         private List<Graph.Edge> resultedEdges;
         private int cyclesCount;
-
 
         public Branch() {
             removedVertices = new HashSet<>();
@@ -55,6 +60,9 @@ public abstract class BaseDetector {
             return true;
         }
 
+        /**
+         * check if shrinking parts of two branch are not intersected
+         */
         public boolean isMergeable(Branch branch) {
             HashSet<Integer> removed = new HashSet<>(removedVertices);
             removed.addAll(branch.getRemovedVertices());
@@ -102,7 +110,10 @@ public abstract class BaseDetector {
         }
     }
 
-
+    /**
+     * Explicit branch is the best case.
+     * It means that state has only one child state (good for searching).
+     */
     public abstract Branch searchExplicitBranch() throws DetectorException, GenomeException;
 
     public abstract List<Branch> search() throws Exception;

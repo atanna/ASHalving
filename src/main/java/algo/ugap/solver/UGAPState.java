@@ -40,8 +40,6 @@ public abstract class UGAPState extends State {
     @Override
     public List<State> computeNextStates(boolean isRestricted) {
         try {
-
-
             ArrayList<State> states = new ArrayList<>();
             List<BaseDetector.Branch> branches = new ArrayList<>();
             if (data.size() == 0) {
@@ -52,17 +50,17 @@ public abstract class UGAPState extends State {
                 branches = detector.search();
                 if (branches.size() == 1) {
                     // explicit case
-//                    System.out.println("Explicit case" + branches.get(0).getResultedEdges());
+                    // branch has only one child, so we can do lazy reconstruction of the current graph
+                    // (it's good for performance)
                     BaseDetector.Branch branch = branches.get(0);
-
                     cyclesCount += branches.get(0).getCyclesCount();
                     resultMatching.addAll(data.convertToRealEdges(branch.getResultedEdges()));
                     data.lazyReconstruct(branches.get(0));
-
                 } else if (branches.size() == 0) {
                     throw new DetectorException("Detector found nothing");
                 } else {
-                    // branches size > 1
+                    // implicit case
+                    // branches count > 1
                     break;
                 }
             }

@@ -31,7 +31,7 @@ public class GAP3DetectorTest {
         GAP3Detector detector = new GAP3Detector(graph, false);
         BaseDetector.Branch result = detector.search2();
         int cyclesCount = result.getCyclesCount();
-        assertEquals(cyclesCount, 2);
+        assertEquals(2, cyclesCount);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class GAP3DetectorTest {
         BaseSolver solver = new SeqSolver(firstState);
         solver.solve();
         Solution solution = solver.getCurrentSolution();
-        assertEquals(solution.getCyclesCount(), 6);
+        assertEquals(6, solution.getCyclesCount());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class GAP3DetectorTest {
         BaseSolver solver = new SeqSolver(firstState);
         solver.solve();
         Solution solution = solver.getCurrentSolution();
-        assertEquals(solution.getCyclesCount(), 5);
+        assertEquals(5, solution.getCyclesCount());
     }
 
     @Test
@@ -87,6 +87,6 @@ public class GAP3DetectorTest {
         BaseSolver solver = new SeqSolver(firstState);
         solver.solve();
         Solution solution = solver.getCurrentSolution();
-        assertEquals(solution.getCyclesCount(), 4);
+        assertEquals(4, solution.getCyclesCount());
     }
 }
