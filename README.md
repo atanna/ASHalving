@@ -14,5 +14,5 @@ cli options:
          
  example:
  
-`java11 -classpath target/classes:lib/* Run -g yeasts_tannier/36/wgd.gen -b yeasts_tannier/36/ord.gen -o resultedPath`
+`java11 -classpath target/classes:lib/* Run -g data/yeasts_tannier/36/wgd.gen -b data/yeasts_tannier/36/ord.gen -o resultedPath`
  
