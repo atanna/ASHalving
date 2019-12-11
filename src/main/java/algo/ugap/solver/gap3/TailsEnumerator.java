@@ -1,11 +1,11 @@
-package algo.distance_problems.shrink;
+package algo.ugap.solver.gap3;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import algo.graph.Graph;
+import algo.ugap.graph.Graph;
 
 public class TailsEnumerator {
     private ArrayList<Integer> sources;

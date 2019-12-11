@@ -2,13 +2,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import algo.graph.DuplicatedGenome;
-import algo.graph.Neighbours;
-import algo.graph.OrdinaryGenome;
-import algo.graph.TwoRegularNeighbours;
-import algo.guided_problems.GGHPGraph;
-import algo.guided_problems.gghp.Solver;
-import algo.solver.Solution;
+import algo.ugap.graph.DuplicatedGenome;
+import algo.ugap.graph.Neighbours;
+import algo.ugap.graph.OrdinaryGenome;
+import algo.ugap.graph.TwoRegularNeighbours;
+import algo.ugap.solver.BaseSolver;
+import algo.ugap.solver.SeqSolver;
+import algo.ugap.solver.gghp.GGHPGraph;
+import algo.ugap.solver.ParallelSolver;
+import algo.ugap.solver.Solution;
+import algo.ugap.solver.gghp.GGHPState;
 import genome.Genome;
 import graph.BreakpointGraph;
 import org.apache.commons.cli.CommandLine;
@@ -45,20 +48,23 @@ public class GGHPMain {
         BreakpointGraph graph = new BreakpointGraph();
         Neighbours ordNeigbours = graph.addGenome(ordGenome, "ord");
         Neighbours wgdNeigbours = graph.addGenome(wgdGenome, "wgd");
+        int size = graph.getSize();
 
-
-        Solver solver = tryToSolve(ordNeigbours, wgdNeigbours, timeLimit, isRestricted);
+        BaseSolver solver = tryToSolve(ordNeigbours, wgdNeigbours, timeLimit, isRestricted);
 
         Solution solution = solver.getCurrentSolution();
-        Common.writeResult(graph, solution, solver.getDistance(), resultedPath, isRestricted, "GGHP", nameTest);
+        System.out.println("Time: " + solver.getSolutionTime());
+        Common.writeResult(graph, solution, solution.getDistance(3, size), resultedPath, isRestricted, "gghp", nameTest);
     }
 
-    public static algo.guided_problems.gghp.Solver tryToSolve(Neighbours ordNbrs, Neighbours wgdNbrs, int timeLimit, boolean isRestricted) throws Exception {
+    public static BaseSolver tryToSolve(Neighbours ordNbrs, Neighbours wgdNbrs, int timeLimit, boolean isRestricted) throws Exception {
         DuplicatedGenome baseGenome = new DuplicatedGenome(new TwoRegularNeighbours(wgdNbrs.neighbours));
         OrdinaryGenome guidedGenome = new OrdinaryGenome(new Neighbours(ordNbrs.neighbours, 1));
         GGHPGraph graph = new GGHPGraph(baseGenome, guidedGenome);
 
-        algo.guided_problems.gghp.Solver solver = new Solver(graph);
+        GGHPState firstState = new GGHPState(graph);
+        BaseSolver solver = new SeqSolver(firstState);
+//        BaseSolver solver = new ParallelSolver(firstState);
         if (timeLimit != -1) {
             solver.solveWithLimit(timeLimit, isRestricted);
         }
@@ -104,6 +110,7 @@ public class GGHPMain {
             isRestricted = cmd.hasOption("restricted");
             String dir = cmd.getOptionValue("dir");
             if (ordPath != null && wgdPath != null && resultedPath != null) {
+                System.out.println(ordPath + " " + wgdPath + " " + resultedPath);
                 solveProblem(ordPath, wgdPath, resultedPath, timeLimit, isRestricted);
             } else if (dir != null) {
                 solveAllFromDir(dir, timeLimit, isRestricted);

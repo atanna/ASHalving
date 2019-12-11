@@ -2,8 +2,9 @@ package algo.ugap.solver.gap3;
 
 import java.util.ArrayList;
 
-import algo.graph.Graph;
-import algo.guided_problems.GAPGraph;
+
+import algo.ugap.graph.GAPGraph;
+import algo.ugap.graph.Graph;
 import algo.ugap.solver.UGAPState;
 
 public class GAP3State extends UGAPState {

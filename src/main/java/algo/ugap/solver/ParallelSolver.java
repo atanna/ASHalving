@@ -6,9 +6,13 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import algo.graph.GenomeException;
+import algo.ugap.graph.GenomeException;
+
 
 public class ParallelSolver extends BaseSolver {
+
+    private volatile AtomicInteger atomicLowerBound;
+    private volatile AtomicInteger atomicUpperBound;
 
     public ParallelSolver(State firstState) {
         super(firstState);
@@ -17,13 +21,8 @@ public class ParallelSolver extends BaseSolver {
         currentSolution = new Solution();
     }
 
-
-    private volatile AtomicInteger atomicLowerBound;
-    private volatile AtomicInteger atomicUpperBound;
-
-
     @Override
-    public boolean _solve() {
+    protected boolean innerSolve() {
         try {
             MainSolver solver = new MainSolver(getFirstState());
             currentSolution = new ForkJoinPool().invoke(solver);

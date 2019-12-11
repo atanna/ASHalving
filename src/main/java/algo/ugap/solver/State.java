@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import algo.graph.Graph;
+import algo.ugap.graph.Graph;
 
 
 public abstract class State {
@@ -25,6 +25,8 @@ public abstract class State {
     }
 
     abstract public List<State> computeNextStates(boolean isRestricted);
+
+    abstract public int getSize();
 
     public boolean isMissedState() {
         return false;

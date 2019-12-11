@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import algo.graph.Graph;
-import algo.solver.Solution;
+import algo.ugap.graph.Graph;
+import algo.ugap.solver.Solution;
 import genome.Genome;
 import graph.BreakpointGraph;
 import io.Grimm;

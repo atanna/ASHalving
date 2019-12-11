@@ -2,10 +2,8 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.SplittableRandom;
 
-import algo.graph.Neighbours;
+import algo.ugap.graph.Neighbours;
 import genome.Chromosome;
 import genome.DirectedGene;
 import genome.Genome;

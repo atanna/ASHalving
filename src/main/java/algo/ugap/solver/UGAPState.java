@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import algo.distance_problems.detector.DetectorException;
-
-import algo.graph.Graph;
-import algo.guided_problems.GAPGraph;
-import algo.solver.BaseDetector;
+import algo.ugap.graph.Graph;
+import algo.ugap.graph.GAPGraph;
 
 public abstract class UGAPState extends State {
     protected GAPGraph data;
@@ -32,7 +29,7 @@ public abstract class UGAPState extends State {
         return result;
     }
 
-    protected int getSize() {
+    public int getSize() {
         return data.size();
     }
 
@@ -46,7 +43,7 @@ public abstract class UGAPState extends State {
 
 
             ArrayList<State> states = new ArrayList<>();
-            List<algo.solver.BaseDetector.Branch> branches = new ArrayList<>();
+            List<BaseDetector.Branch> branches = new ArrayList<>();
             if (data.size() == 0) {
                 return List.of();
             }
@@ -55,8 +52,8 @@ public abstract class UGAPState extends State {
                 branches = detector.search();
                 if (branches.size() == 1) {
                     // explicit case
-                    System.out.println("Explicit case" + branches.get(0).getResultedEdges());
-                    algo.solver.BaseDetector.Branch branch = branches.get(0);
+//                    System.out.println("Explicit case" + branches.get(0).getResultedEdges());
+                    BaseDetector.Branch branch = branches.get(0);
 
                     cyclesCount += branches.get(0).getCyclesCount();
                     resultMatching.addAll(data.convertToRealEdges(branch.getResultedEdges()));

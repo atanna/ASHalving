@@ -3,7 +3,7 @@ package algo.ugap.solver;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import algo.graph.Graph;
+import algo.ugap.graph.Graph;
 
 public class Solution {
 
@@ -48,6 +48,10 @@ public class Solution {
 
     public int getCyclesCount() {
         return cyclesCount;
+    }
+
+    public int getDistance(int fullDegree, int size) {
+        return fullDegree * size / 2 - getCyclesCount();
     }
 
     public ArrayList<Graph.Edge> getResultMatching() {

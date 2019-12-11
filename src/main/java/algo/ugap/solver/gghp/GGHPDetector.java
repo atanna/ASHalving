@@ -9,13 +9,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-
-import algo.graph.GenomeException;
-import algo.graph.Graph;
-import algo.graph.Neighbours;
-import algo.graph.OrdinaryGenome;
-import algo.graph.TwoRegularNeighbours;
-import algo.guided_problems.GGHPGraph;
+import algo.ugap.graph.GenomeException;
+import algo.ugap.graph.Graph;
+import algo.ugap.graph.Neighbours;
+import algo.ugap.graph.OrdinaryGenome;
+import algo.ugap.graph.TwoRegularNeighbours;
 import algo.ugap.solver.Detector;
 
 

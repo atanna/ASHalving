@@ -1,6 +1,6 @@
 package algo.ugap.solver;
 
-import algo.graph.GenomeException;
+import algo.ugap.graph.GenomeException;
 
 
 public abstract class BaseSolver {
@@ -46,7 +46,7 @@ public abstract class BaseSolver {
     public boolean solve() throws Exception {
         startTime = System.currentTimeMillis();
 
-        boolean result = _solve();
+        boolean result = innerSolve();
 
         finishTime = System.currentTimeMillis();
         return result;
@@ -56,7 +56,7 @@ public abstract class BaseSolver {
         return startTime + timeLimit <  System.currentTimeMillis();
     }
 
-    protected abstract boolean _solve() throws GenomeException;
+    protected abstract boolean innerSolve() throws GenomeException;
 
     public Solution getCurrentSolution() {
         return currentSolution;

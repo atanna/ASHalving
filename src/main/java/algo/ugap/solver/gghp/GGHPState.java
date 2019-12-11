@@ -2,10 +2,8 @@ package algo.ugap.solver.gghp;
 
 import java.util.ArrayList;
 
-import algo.graph.Graph;
-import algo.guided_problems.GAPGraph;
-import algo.guided_problems.GGAPGraph;
-import algo.guided_problems.GGHPGraph;
+import algo.ugap.graph.Graph;
+import algo.ugap.graph.GAPGraph;
 import algo.ugap.solver.UGAPState;
 
 public class GGHPState extends UGAPState {

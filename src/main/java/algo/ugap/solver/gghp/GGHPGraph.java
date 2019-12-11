@@ -1,12 +1,12 @@
-package algo.guided_problems;
+package algo.ugap.solver.gghp;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import algo.graph.BaseGenome;
-import algo.graph.DuplicatedGenome;
-import algo.graph.GenomeException;
-import algo.graph.OrdinaryGenome;
+import algo.ugap.graph.DuplicatedGenome;
+import algo.ugap.graph.GenomeException;
+import algo.ugap.graph.OrdinaryGenome;
+import algo.ugap.graph.GGAPGraph;
 
 public class GGHPGraph extends GGAPGraph {
     protected DuplicatedGenome baseGenome;

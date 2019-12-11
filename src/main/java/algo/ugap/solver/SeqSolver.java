@@ -3,7 +3,7 @@ package algo.ugap.solver;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import algo.graph.GenomeException;
+import algo.ugap.graph.GenomeException;
 
 
 public class SeqSolver extends BaseSolver {
@@ -13,6 +13,7 @@ public class SeqSolver extends BaseSolver {
     protected int lowerBound = -1;
     protected int upperBound = -1;
     private int iterations = 0;
+    int firstBruteForce = 0;
 
     private int initialQueueCapacity = 1000;
 
@@ -80,13 +81,12 @@ public class SeqSolver extends BaseSolver {
         }
     }
 
-
     boolean isLimitReached() {
         return startTime + timeLimit <  System.currentTimeMillis();
     }
 
     @Override
-    protected boolean _solve() throws GenomeException {
+    protected boolean innerSolve() throws GenomeException {
         if (pq.isEmpty()) {
             pq.add(getFirstState());
 
@@ -108,6 +108,13 @@ public class SeqSolver extends BaseSolver {
             }
 
             List<State> states = state.computeNextStates(isRestricted);
+            if (states.size() > 1) {
+                int stateSize = state.getSize();
+                if (firstBruteForce == 0 || firstBruteForce < stateSize) {
+                    firstBruteForce = stateSize;
+                    System.out.println("Size = " + stateSize + " first brute force");
+                }
+            }
             for (State nextState : states) {
                 setBoundsToState(nextState);
                 updateBounds(nextState);

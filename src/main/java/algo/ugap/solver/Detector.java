@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import algo.graph.GenomeException;
-import algo.guided_problems.GAPGraph;
-import algo.solver.BaseDetector;
-import algo.graph.Graph;
-import algo.guided_problems.GGHPGraph;
+import algo.ugap.graph.GAPGraph;
+import algo.ugap.graph.GenomeException;
+import algo.ugap.graph.Graph;
+import algo.ugap.solver.gghp.GGHPGraph;
 
 
 public abstract class Detector extends BaseDetector {

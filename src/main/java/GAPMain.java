@@ -1,9 +1,12 @@
 
 
-import algo.distance_problems.Solver;
-import algo.graph.BaseGenome;
-import algo.graph.Neighbours;
-import algo.solver.Solution;
+import algo.ugap.graph.GAPGraph;
+import algo.ugap.solver.BaseSolver;
+import algo.ugap.graph.BaseGenome;
+import algo.ugap.graph.Neighbours;
+import algo.ugap.solver.ParallelSolver;
+import algo.ugap.solver.Solution;
+import algo.ugap.solver.gap3.GAP3State;
 import genome.Genome;
 import graph.BreakpointGraph;
 import org.apache.commons.cli.CommandLine;
@@ -25,20 +28,22 @@ public class GAPMain {
 
         BreakpointGraph graph = new BreakpointGraph();
         Neighbours neighbours = graph.addGenome(genome);
+        int size = neighbours.size();
 
-
-        Solver solver = tryToSolve(neighbours, timeLimit, isRestricted);
+        BaseSolver solver = tryToSolve(neighbours, timeLimit, isRestricted);
 
         Solution solution = solver.getCurrentSolution();
-        Common.writeResult(graph, solution, solver.getDistance(), resultedPath, isRestricted, "GAP", nameTest);
+        Common.writeResult(graph, solution, solution.getDistance(3, size), resultedPath, isRestricted, "GAP", nameTest);
 
     }
 
-    public static algo.distance_problems.Solver tryToSolve(Neighbours nbrs, int timeLimit, boolean isRestricted) throws Exception {
+    public static BaseSolver tryToSolve(Neighbours nbrs, int timeLimit, boolean isRestricted) throws Exception {
         BaseGenome baseGenome = new BaseGenome(nbrs);
 
+        GAPGraph graph = new GAPGraph(baseGenome);
 
-        algo.distance_problems.Solver solver = new Solver(baseGenome);
+        GAP3State firstState = new GAP3State(graph);
+        BaseSolver solver = new ParallelSolver(firstState);
         if (timeLimit != -1) {
             solver.solveWithLimit(timeLimit, isRestricted);
         }

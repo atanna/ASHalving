@@ -1,4 +1,4 @@
-package algo.solver;
+package algo.ugap.solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,9 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import algo.distance_problems.detector.DetectorException;
-import algo.graph.GenomeException;
-import algo.graph.Graph;
+import algo.ugap.graph.GenomeException;
+import algo.ugap.graph.Graph;
 
 
 public abstract class BaseDetector {

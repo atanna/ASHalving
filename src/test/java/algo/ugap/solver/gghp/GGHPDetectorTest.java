@@ -3,10 +3,10 @@ package algo.ugap.solver.gghp;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import algo.graph.DuplicatedGenome;
-import algo.graph.GenomeException;
-import algo.graph.OrdinaryGenome;
-import algo.guided_problems.GGHPGraph;
+
+import algo.ugap.graph.DuplicatedGenome;
+import algo.ugap.graph.GenomeException;
+import algo.ugap.graph.OrdinaryGenome;
 import algo.ugap.solver.BaseSolver;
 import algo.ugap.solver.ParallelSolver;
 import algo.ugap.solver.SeqSolver;

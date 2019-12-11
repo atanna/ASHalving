@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import algo.graph.Graph;
-import algo.graph.Neighbours;
+import algo.ugap.graph.Graph;
+import algo.ugap.graph.Neighbours;
 import genome.Chromosome;
 import genome.DirectedGene;
 import genome.Genome;
