@@ -125,11 +125,11 @@ public class GGHPDetector extends Detector {
                     }
 
                 } else {
-    //                    throw new DetectorException("Every vertex must have two neighbours");
+                    //                    throw new DetectorException("Every vertex must have two neighbours");
                 }
             }
             return resultedBranch;
-        }  catch (GenomeException e) {
+        } catch (GenomeException e) {
             e.printStackTrace();
             return null;
         }
@@ -316,16 +316,20 @@ public class GGHPDetector extends Detector {
                     processed.add(vertex);
                     processed.add(nextVertex);
                     processed.add(nextNextVertex);
-                    continue;
+//                    continue;
                     // cycle size = 4
-                    // 1
-    //                List<Graph.Edge> newGuidedEdges = Arrays.asList(new Graph.Edge(guidedPrevPrev, guidedNext), new Graph.Edge(guidedPrev, guidedVertex));
-    //                result.add(getBranch(List.of(), newGuidedEdges, Arrays.asList(new Graph.Edge(prevPrevVertex, nextVertex), new Graph.Edge(prevVertex, vertex)), 3));
-    //
-    //                List<Graph.Edge> newGuidedEdges2 = Arrays.asList(new Graph.Edge(guidedPrevPrev, guidedPrev), new Graph.Edge(guidedNext, guidedVertex));
-    //                result.add(getBranch(List.of(), newGuidedEdges2, Arrays.asList(new Graph.Edge(prevPrevVertex, prevVertex), new Graph.Edge(nextVertex, vertex)), 3));
-    //
-    //                return result;
+                    // 1;
+                    List<Graph.Edge> newGuidedEdges1 = new ArrayList<>();//Arrays.asList(new Graph.Edge(guidedPrevPrev, guidedNext),new Graph.Edge(guidedPrev, guidedVertex));
+                    newGuidedEdges1.add(new Graph.Edge(guidedPrevPrev, guidedNext));
+                    newGuidedEdges1.add(new Graph.Edge(guidedPrev, guidedVertex));
+                    result.add(getBranch(List.of(), newGuidedEdges1, Arrays.asList(new Graph.Edge(prevPrevVertex, nextVertex), new Graph.Edge(prevVertex, vertex)), 3));
+
+                    List<Graph.Edge> newGuidedEdges2 = new ArrayList<>();;
+                    newGuidedEdges2.add(new Graph.Edge(guidedPrevPrev, guidedPrev));
+                    newGuidedEdges2.add(new Graph.Edge(guidedNext, guidedVertex));
+                    result.add(getBranch(List.of(), newGuidedEdges2, Arrays.asList(new Graph.Edge(prevPrevVertex, prevVertex), new Graph.Edge(nextVertex, vertex)), 3));
+
+                    return result;
                 }
 
                 while (!processed.contains(vertex)) {
@@ -402,8 +406,7 @@ public class GGHPDetector extends Detector {
         }
     }
 
-    private void addBranchAlongEdgeToResult(int vertex, int matchingVertex, ArrayList<Branch> result, OrdinaryGenome guidedGenome, Neighbours neighbours, int guidedTarget, Integer[] targets)
-    {
+    private void addBranchAlongEdgeToResult(int vertex, int matchingVertex, ArrayList<Branch> result, OrdinaryGenome guidedGenome, Neighbours neighbours, int guidedTarget, Integer[] targets) {
         try {
             if (!(neighbours.hasEdge(vertex, matchingVertex) || guidedTarget == matchingVertex)) {
                 // along edges only

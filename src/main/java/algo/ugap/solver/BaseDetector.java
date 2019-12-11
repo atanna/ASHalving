@@ -13,7 +13,7 @@ import algo.ugap.graph.Graph;
 
 public abstract class BaseDetector {
 
-    public class Branch {
+    public static class Branch {
         private HashSet<Integer> removedVertices;
         private HashMap<String, List<Graph.Edge>> addedEdges;
         private List<Graph.Edge> resultedEdges;

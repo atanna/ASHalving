@@ -53,29 +53,18 @@ public class GAP3Detector extends Detector {
 
             }
             if (counts.size() == 2) {
-                if (targetDegree2 == -1) {
-                    System.out.println(targetDegree1);
-                    System.out.println(targetDegree2);
-                    System.out.println(targetDegree3);
-                    System.out.println("vertex " + vertex);
-                    for (Iterator<Integer> iter = neighbours.getVertexNeighbours(vertex).iterator(); iter
-                            .hasNext(); ) {
-                        System.out.println(iter.next());
-                    }
-                    System.out.println(counts);
-                }
                 int targetTarget = -1;
                 if (vertex == targetDegree2) {
                     if (verticesWithLoops.contains(targetDegree1)) {
                         resultedBranch.merge(
                                 getBranch(List.of(), Arrays.asList(new Graph.Edge(targetDegree1, vertex)), 2)
                         );
-                    } else {
+                    } else if (vertex < targetDegree1) {
                         verticesWithLoops.add(vertex);
                     }
                 } else {
-                    for (Iterator<Integer> iter = neighbours.getVertexNeighbours(targetDegree2).iterator(); iter
-                            .hasNext(); ) {
+                    for (Iterator<Integer> iter = neighbours.getVertexNeighbours(targetDegree2).iterator();
+                            iter.hasNext(); ) {
                         targetTarget = iter.next();
                         if (targetTarget != vertex) {
                             break;
