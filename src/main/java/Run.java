@@ -18,9 +18,9 @@ import algo.ugap.solver.gghp.GGHPGraph;
 import algo.ugap.solver.ParallelSolver;
 import algo.ugap.solver.Solution;
 import algo.ugap.solver.gghp.GGHPState;
-import genome.Genome;
-import graph.BreakpointGraph;
-import io.Grimm;
+import bio.genome.Genome;
+import bio.graph.BreakpointGraph;
+import bio.io.Grimm;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -28,7 +28,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import static io.Grimm.Reader.readFile;
+import static bio.io.Grimm.Reader.readFile;
 
 public class Run {
 

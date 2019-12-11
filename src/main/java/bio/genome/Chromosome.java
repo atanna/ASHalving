@@ -1,4 +1,4 @@
-package genome;
+package bio.genome;
 
 import java.util.ArrayList;
 import java.util.List;

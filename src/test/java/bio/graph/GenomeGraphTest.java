@@ -1,11 +1,12 @@
-package graph;
+package bio.graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import genome.Chromosome;
-import genome.DirectedGene;
-import genome.Genome;
+import bio.genome.Chromosome;
+import bio.genome.DirectedGene;
+import bio.genome.Genome;
+import bio.graph.GenomeGraph;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

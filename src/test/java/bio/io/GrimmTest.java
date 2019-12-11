@@ -1,4 +1,4 @@
-package io;
+package bio.io;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,7 +7,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
-import genome.Genome;
+import bio.genome.Genome;
+import bio.io.Grimm;
 import org.junit.Test;
 
 

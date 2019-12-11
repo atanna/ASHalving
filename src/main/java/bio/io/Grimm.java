@@ -1,4 +1,4 @@
-package io;
+package bio.io;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import genome.Chromosome;
-import genome.DirectedGene;
-import genome.Genome;
+import bio.genome.Chromosome;
+import bio.genome.Genome;
+import bio.genome.DirectedGene;
 
 public class Grimm {
 

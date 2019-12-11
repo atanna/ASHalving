@@ -1,4 +1,4 @@
-package genome;
+package bio.genome;
 
 import java.util.HashMap;
 

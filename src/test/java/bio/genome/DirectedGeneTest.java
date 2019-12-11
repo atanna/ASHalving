@@ -1,5 +1,6 @@
-package genome;
+package bio.genome;
 
+import bio.genome.DirectedGene;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

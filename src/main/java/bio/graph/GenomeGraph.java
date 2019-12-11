@@ -1,12 +1,12 @@
-package graph;
+package bio.graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import algo.ugap.graph.Neighbours;
-import genome.Chromosome;
-import genome.DirectedGene;
-import genome.Genome;
+import bio.genome.Chromosome;
+import bio.genome.Genome;
+import bio.genome.DirectedGene;
 
 public class GenomeGraph {
     public static class Vertex {
