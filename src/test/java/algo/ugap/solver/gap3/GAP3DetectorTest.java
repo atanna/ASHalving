@@ -35,6 +35,42 @@ public class GAP3DetectorTest {
     }
 
     @Test
+    public void updateWithExplicit4Ad5Test() throws Exception {
+        //5
+        //5. E = {ab, bc, cd, ad, cb, ab}
+        ArrayList<ArrayList<Integer>> neighbours = new ArrayList<>();
+        neighbours.add(new ArrayList<>(Arrays.asList(5, 3, 4)));
+        neighbours.add(new ArrayList<>(Arrays.asList(1, 1, 2)));
+        neighbours.add(new ArrayList<>(Arrays.asList(2, 2, 1)));
+        neighbours.add(new ArrayList<>(Arrays.asList(0, 4, 5)));
+        neighbours.add(new ArrayList<>(Arrays.asList(0, 3, 5)));
+        neighbours.add(new ArrayList<>(Arrays.asList(0, 4, 3)));
+        DuplicatedGenome baseGenome = new DuplicatedGenome(neighbours);
+        GAPGraph graph = new GAPGraph(baseGenome);
+        GAP3Detector detector = new GAP3Detector(graph, false);
+        BaseDetector.Branch result = detector.search2();
+        detector.updateWithExplicit4(result);
+        assertEquals(6, result.getCyclesCount());
+    }
+
+    @Test
+    public void updateWithExplicit4Ad1Test() throws Exception {
+        //1
+        //1. E = {aa, bb, cc, ad, bd, cd}
+        ArrayList<ArrayList<Integer>> neighbours = new ArrayList<>();
+        neighbours.add(new ArrayList<>(Arrays.asList(0, 0, 3)));
+        neighbours.add(new ArrayList<>(Arrays.asList(1, 1, 3)));
+        neighbours.add(new ArrayList<>(Arrays.asList(2, 2, 3)));
+        neighbours.add(new ArrayList<>(Arrays.asList(0, 1, 2)));
+        DuplicatedGenome baseGenome = new DuplicatedGenome(neighbours);
+        GAPGraph graph = new GAPGraph(baseGenome);
+        GAP3Detector detector = new GAP3Detector(graph, false);
+        BaseDetector.Branch result = detector.search2();
+        detector.updateWithExplicit4(result);
+        assertEquals(3, result.getCyclesCount());
+    }
+
+    @Test
     public void solverLoopTest() throws Exception {
         ArrayList<ArrayList<Integer>> neighbours = new ArrayList<>();
         neighbours.add(new ArrayList<>(Arrays.asList(5, 3, 4)));

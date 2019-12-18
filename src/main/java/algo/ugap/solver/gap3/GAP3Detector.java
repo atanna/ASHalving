@@ -83,6 +83,13 @@ public class GAP3Detector extends Detector {
 
     @Override
     protected void updateWithExplicit4(Branch resultedBranch) {
+        // There are 4 explicit not isomorphic cases: 1, 2, 4, 5
+        // H = (V,E), V = {a, b, c, d}
+        // 1. E = {aa, bb, cc, ad, bd, cd}
+        // 2. E = {dd, cd, cb, ca, ab}
+        // 3. E = {ab, bc, cd, ad}
+        // 4. E = {ab, bc, cd, ad, cb}
+        // 5. E = {ab, bc, cd, ad, cb, ab}
         Neighbours neighbours = graph.getBaseGenome().getNeighbours();
         for (Iterator<Integer> it = neighbours.getVertices().iterator(); it.hasNext(); ) {
             int vertex = it.next();
