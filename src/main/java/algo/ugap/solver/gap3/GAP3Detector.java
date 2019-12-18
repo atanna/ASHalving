@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import algo.ugap.graph.GenomeException;
@@ -82,7 +83,42 @@ public class GAP3Detector extends Detector {
 
     @Override
     protected void updateWithExplicit4(Branch resultedBranch) {
-
+        Neighbours neighbours = graph.getBaseGenome().getNeighbours();
+        for (Iterator<Integer> it = neighbours.getVertices().iterator(); it.hasNext(); ) {
+            int vertex = it.next();
+            HashSet<Integer> neigboursDepth2 = new HashSet<>();
+            neighbours.getVertexNeighbours(vertex).forEach(neigboursDepth2::add);
+            AtomicBoolean hasLoops = new AtomicBoolean(neigboursDepth2.contains(vertex));
+            for (Iterator<Integer> itTarget = neighbours.getVertexNeighbours(vertex).iterator(); itTarget.hasNext();) {
+                int target = itTarget.next();
+                neigboursDepth2.add(target);
+                neighbours.getVertexNeighbours(target).forEach(v->{
+                    neigboursDepth2.add(v);
+                    if (v == target) {
+                        hasLoops.set(true);
+                    }
+                });
+            }
+            if (neigboursDepth2.size() == 4) {
+                // cases 1, 5
+                int cyclesCount = 4;
+                if (hasLoops.get()) {
+                    // case 1
+                    cyclesCount = 3;
+                }
+                Integer[] nbrs = neigboursDepth2.toArray(new Integer[0]);
+                resultedBranch.merge(getBranch(
+                        List.of(),
+                        Arrays.asList(
+                                new Graph.Edge(nbrs[0], nbrs[1]),
+                                new Graph.Edge(nbrs[2], nbrs[3])),
+                        cyclesCount));
+            } else if (neigboursDepth2.size() == 6) {
+                // cases 2, 4
+            } else {
+                continue;
+            }
+        }
     }
 
     @Override
