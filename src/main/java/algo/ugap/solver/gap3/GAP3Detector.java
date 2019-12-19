@@ -96,6 +96,7 @@ public class GAP3Detector extends Detector {
             HashSet<Integer> neigboursDepth2 = new HashSet<>();
             neighbours.getVertexNeighbours(vertex).forEach(neigboursDepth2::add);
             AtomicBoolean hasLoops = new AtomicBoolean(neigboursDepth2.contains(vertex));
+            HashSet<Integer> verticesWithLoops = new HashSet<>();
             for (Iterator<Integer> itTarget = neighbours.getVertexNeighbours(vertex).iterator(); itTarget.hasNext();) {
                 int target = itTarget.next();
                 neigboursDepth2.add(target);
@@ -103,6 +104,7 @@ public class GAP3Detector extends Detector {
                     neigboursDepth2.add(v);
                     if (v == target) {
                         hasLoops.set(true);
+                        verticesWithLoops.add(v);
                     }
                 });
             }
@@ -122,6 +124,35 @@ public class GAP3Detector extends Detector {
                         cyclesCount));
             } else if (neigboursDepth2.size() == 6) {
                 // cases 2, 4
+                if (verticesWithLoops.size() == 1) {
+                    //case 2
+                    int loopVertex = verticesWithLoops.iterator().next();
+                    int a = -1, b = -1;
+                    for (Iterator<Integer> itTarget = neighbours.getVertexNeighbours(vertex).iterator(); itTarget.hasNext();) {
+                        int target = itTarget.next();
+                        if (target == loopVertex) {
+                            continue;
+                        }
+                        if (a == -1) {
+                            a = target;
+                        } else {
+                            b = target;
+                        }
+                    }
+                    HashSet<Integer> neighboursA = new HashSet<>();
+                    neighbours.getVertexNeighbours(vertex).forEach(neighboursA::add);
+                    if (neighboursA.contains(b)) {
+                        neigboursDepth2.removeAll(Arrays.asList(vertex,loopVertex,a,b));
+                        Integer[] addVertices = neigboursDepth2.toArray(new Integer[0]);
+                        resultedBranch.merge(getBranch(
+                                Arrays.asList(
+                                        new Graph.Edge(addVertices[0],addVertices[1])),
+                                Arrays.asList(
+                                        new Graph.Edge(vertex, loopVertex),
+                                        new Graph.Edge(a, b)), 3));
+                    }
+
+                }
             } else {
                 continue;
             }
