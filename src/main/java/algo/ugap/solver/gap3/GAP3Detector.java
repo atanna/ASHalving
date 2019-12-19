@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import algo.ugap.graph.GenomeException;
@@ -93,63 +93,72 @@ public class GAP3Detector extends Detector {
         Neighbours neighbours = graph.getBaseGenome().getNeighbours();
         for (Iterator<Integer> it = neighbours.getVertices().iterator(); it.hasNext(); ) {
             int vertex = it.next();
-            HashSet<Integer> neigboursDepth2 = new HashSet<>();
-            neighbours.getVertexNeighbours(vertex).forEach(neigboursDepth2::add);
-            AtomicBoolean hasLoops = new AtomicBoolean(neigboursDepth2.contains(vertex));
+            HashSet<Integer> neighboursDepth2 = new HashSet<>();
+            neighbours.getVertexNeighbours(vertex).forEach(neighboursDepth2::add);
             HashSet<Integer> verticesWithLoops = new HashSet<>();
             for (Iterator<Integer> itTarget = neighbours.getVertexNeighbours(vertex).iterator(); itTarget.hasNext();) {
                 int target = itTarget.next();
-                neigboursDepth2.add(target);
+                neighboursDepth2.add(target);
                 neighbours.getVertexNeighbours(target).forEach(v->{
-                    neigboursDepth2.add(v);
+                    neighboursDepth2.add(v);
                     if (v == target) {
-                        hasLoops.set(true);
                         verticesWithLoops.add(v);
                     }
                 });
             }
-            if (neigboursDepth2.size() == 4) {
+            if (neighboursDepth2.size() == 4) {
                 // cases 1, 5
                 int cyclesCount = 4;
-                if (hasLoops.get()) {
+                if (verticesWithLoops.size() > 0) {
                     // case 1
                     cyclesCount = 3;
                 }
-                Integer[] nbrs = neigboursDepth2.toArray(new Integer[0]);
+                Integer[] nbrs = neighboursDepth2.toArray(new Integer[0]);
                 resultedBranch.merge(getBranch(
                         List.of(),
                         Arrays.asList(
                                 new Graph.Edge(nbrs[0], nbrs[1]),
                                 new Graph.Edge(nbrs[2], nbrs[3])),
                         cyclesCount));
-            } else if (neigboursDepth2.size() == 6) {
+            } else if (neighboursDepth2.size() == 6) {
                 // cases 2, 4
                 if (verticesWithLoops.size() == 1) {
-                    //case 2
+                    // case 2
                     int loopVertex = verticesWithLoops.iterator().next();
-                    int a = -1, b = -1;
+                    Optional<Integer> vertexA = Optional.empty();
+                    Optional<Integer> vertexB = Optional.empty();
                     for (Iterator<Integer> itTarget = neighbours.getVertexNeighbours(vertex).iterator(); itTarget.hasNext();) {
                         int target = itTarget.next();
                         if (target == loopVertex) {
                             continue;
                         }
-                        if (a == -1) {
-                            a = target;
+                        if (!vertexA.isPresent()) {
+                            vertexA = Optional.of(target);
                         } else {
-                            b = target;
+                            vertexB = Optional.of(target);
                         }
                     }
-                    HashSet<Integer> neighboursA = new HashSet<>();
-                    neighbours.getVertexNeighbours(vertex).forEach(neighboursA::add);
-                    if (neighboursA.contains(b)) {
-                        neigboursDepth2.removeAll(Arrays.asList(vertex,loopVertex,a,b));
-                        Integer[] addVertices = neigboursDepth2.toArray(new Integer[0]);
+                    if (!(vertexA.isPresent() && vertexB.isPresent())) {
+                        continue;
+                    }
+                    if (neighbours.getVertexNeighbours(vertexA.get())
+                            .anyMatch(vertexB.get()::equals)) {
+                        neighboursDepth2.removeAll(
+                                Arrays.asList(vertex, loopVertex, vertexA.get(), vertexB.get())
+                        );
+                        if (neighboursDepth2.size() != 2) {
+                            continue;
+                        }
+                        // outer adequate graph neighbours
+                        Integer[] outerVertices = neighboursDepth2.toArray(new Integer[0]);
                         resultedBranch.merge(getBranch(
                                 Arrays.asList(
-                                        new Graph.Edge(addVertices[0],addVertices[1])),
+                                        new Graph.Edge(outerVertices[0], outerVertices[1])),
                                 Arrays.asList(
                                         new Graph.Edge(vertex, loopVertex),
-                                        new Graph.Edge(a, b)), 3));
+                                        new Graph.Edge(vertexA.get(), vertexB.get())),
+                                3
+                        ));
                     }
 
                 }
