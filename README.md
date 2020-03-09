@@ -1,4 +1,4 @@
-# GenomeMedian
+# ASHalving
 
 #### Run 
 solve Guided Genome Halving Problem (GGHP), Genome Aliquoting Problem m=3 (GAP3)
